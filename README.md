@@ -9,6 +9,8 @@ Built as a companion tool for [Quest Home](#quest-home), a 2-player cooperative 
 - **Dice types:** d4, d6, d8, d10, d12, d20, d100
 - **Quantity selection:** Roll multiple dice of each type
 - **Clear results:** Individual rolls, subtotals per die type, and grand total
+- **Clear button:** Reset dice pool quickly
+- **Dark mode:** Light, dark, or system theme toggle
 - **Mobile-first:** Designed for use at the table on your phone
 - **PWA:** Install it like an app, works offline
 
