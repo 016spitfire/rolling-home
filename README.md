@@ -11,6 +11,8 @@ Built as a companion tool for [Quest Home](#quest-home), a 2-player cooperative 
 - **Clear results:** Individual rolls, subtotals per die type, and grand total
 - **Clear button:** Reset dice pool quickly
 - **Dark mode:** Light, dark, or system theme toggle
+- **Shake to roll:** Enable in settings to roll by shaking your phone
+- **Customizable dice:** Show/hide individual dice types in settings
 - **Mobile-first:** Designed for use at the table on your phone
 - **PWA:** Install it like an app, works offline
 
