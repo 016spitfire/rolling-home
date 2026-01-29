@@ -12,13 +12,19 @@ Built as a companion tool for [Quest Home](#quest-home), a 2-player cooperative 
 - **Clear button:** Reset dice pool quickly
 - **Dark mode:** Light, dark, or system theme toggle
 - **Shake to roll:** Enable in settings to roll by shaking your phone
+- **Roll sound:** 8-bit style audio feedback (optional)
+- **Vibration:** Haptic feedback on roll (optional)
 - **Customizable dice:** Show/hide individual dice types in settings
+- **Slide-out menu:** Easy navigation between sections
 - **Mobile-first:** Designed for use at the table on your phone
 - **PWA:** Install it like an app, works offline
 
 ## Tech Stack
 
-- React
+- React (TypeScript + JSX)
+- Vite
+- Web Audio API (8-bit sounds)
+- Vibration API
 - PWA (manifest + service worker)
 - Hosted on Vercel
 
