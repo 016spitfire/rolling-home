@@ -5,28 +5,6 @@ import { useLocalStorage } from './useLocalStorage';
 const DICE_ORDER = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20', 'd100'];
 
 function createEmptyDiceState() {
-
-  // Game template actions
-  const addGameTemplate = useCallback((template) => {
-    const newTemplate = {
-      ...template,
-      id: 'template-' + Date.now(),
-      createdAt: Date.now(),
-    };
-    setGameTemplates(prev => [...prev, newTemplate]);
-    return newTemplate.id;
-  }, [setGameTemplates]);
-
-  const updateGameTemplate = useCallback((templateId, updates) => {
-    setGameTemplates(prev => prev.map(t =>
-      t.id === templateId ? { ...t, ...updates } : t
-    ));
-  }, [setGameTemplates]);
-
-  const deleteGameTemplate = useCallback((templateId) => {
-    setGameTemplates(prev => prev.filter(t => t.id !== templateId));
-  }, [setGameTemplates]);
-
   return { d4: 0, d6: 0, d8: 0, d10: 0, d12: 0, d20: 0, d100: 0 };
 }
 
@@ -105,13 +83,13 @@ const defaultTileState = {
 export function useToolStates() {
   // Dice state
   const [diceState, setDiceState] = useState(defaultDiceState);
-  
+
   // Card state
   const [cardState, setCardState] = useState(defaultCardState);
-  
+
   // Coin state
   const [coinState, setCoinState] = useState(defaultCoinState);
-  
+
   // Tile state
   const [tileState, setTileState] = useState(defaultTileState);
 
@@ -179,7 +157,7 @@ export function useToolStates() {
   }, [setCustomDecks]);
 
   const updateCustomDeck = useCallback((deckId, updates) => {
-    setCustomDecks(prev => prev.map(d => 
+    setCustomDecks(prev => prev.map(d =>
       d.id === deckId ? { ...d, ...updates } : d
     ));
   }, [setCustomDecks]);
@@ -199,14 +177,12 @@ export function useToolStates() {
     };
 
     if (existingSaveId) {
-      // Overwrite existing save
       setSavedGames(prev => prev.map(save =>
         save.id === existingSaveId
           ? { ...save, state: gameState, timestamp: Date.now() }
           : save
       ));
     } else {
-      // Create new save
       const newSave = {
         id: 'save-' + Date.now(),
         name,
@@ -235,7 +211,6 @@ export function useToolStates() {
     setSavedGames(prev => prev.filter(s => s.id !== saveId));
   }, [setSavedGames]);
 
-
   // Game template actions
   const addGameTemplate = useCallback((template) => {
     const newTemplate = {
@@ -262,17 +237,17 @@ export function useToolStates() {
     diceState,
     updateDiceState,
     resetDice,
-    
+
     // Cards
     cardState,
     updateCardState,
     resetCards,
-    
+
     // Coins
     coinState,
     updateCoinState,
     resetCoins,
-    
+
     // Tiles
     tileState,
     updateTileState,
