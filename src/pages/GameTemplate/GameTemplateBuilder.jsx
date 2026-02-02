@@ -161,7 +161,7 @@ export function GameTemplateBuilder({ existingTemplate = null, customDecks = [],
                   <input
                     type="text"
                     value={v.name}
-                    onChange={(e) => updateVariable(v.id, { name: e.target.value.replace(/s/g, '') })}
+                    onChange={(e) => updateVariable(v.id, { name: e.target.value.replace(/\s/g, '') })}
                     placeholder="variableName"
                     className="var-name-input"
                   />
