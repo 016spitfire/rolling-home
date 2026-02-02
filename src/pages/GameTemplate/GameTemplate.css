@@ -85,12 +85,17 @@
 
 .variable-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+  padding: 10px;
+  background: var(--results-bg);
+  border-radius: 6px;
 }
 
 .var-name-input {
-  flex: 1;
+  flex: 1 1 120px;
+  min-width: 100px;
   padding: 8px;
   font-size: 0.9rem;
   border: 1px solid var(--btn-border);
@@ -98,20 +103,24 @@
   background: var(--btn-bg);
   color: var(--text-color);
   font-family: monospace;
+  box-sizing: border-box;
 }
 
 .var-label-input {
-  flex: 1.5;
+  flex: 2 1 150px;
+  min-width: 120px;
   padding: 8px;
   font-size: 0.9rem;
   border: 1px solid var(--btn-border);
   border-radius: 4px;
   background: var(--btn-bg);
   color: var(--text-color);
+  box-sizing: border-box;
 }
 
 .var-default-input {
   width: 60px;
+  flex-shrink: 0;
   padding: 8px;
   font-size: 0.9rem;
   border: 1px solid var(--btn-border);
@@ -119,6 +128,11 @@
   background: var(--btn-bg);
   color: var(--text-color);
   text-align: center;
+  box-sizing: border-box;
+}
+
+.variable-row .remove-btn {
+  flex-shrink: 0;
 }
 
 .phases-list {
