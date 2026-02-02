@@ -155,6 +155,8 @@
   padding: 12px;
   cursor: pointer;
   background: var(--btn-bg);
+  gap: 8px;
+  overflow: hidden;
 }
 
 .phase-title-row {
@@ -162,21 +164,26 @@
   align-items: center;
   gap: 8px;
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .phase-number {
   font-weight: 600;
   color: var(--roll-btn-bg);
+  flex-shrink: 0;
 }
 
 .phase-name-input {
   flex: 1;
+  min-width: 60px;
   padding: 6px 8px;
   font-size: 0.95rem;
   border: 1px solid transparent;
   border-radius: 4px;
   background: transparent;
   color: var(--text-color);
+  box-sizing: border-box;
 }
 
 .phase-name-input:focus {
@@ -189,6 +196,7 @@
   display: flex;
   gap: 4px;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .phase-actions button {
@@ -203,6 +211,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .phase-actions button:disabled {
@@ -214,6 +223,7 @@
   color: var(--muted-text);
   font-size: 0.8rem;
   margin-left: 4px;
+  flex-shrink: 0;
 }
 
 .phase-content {
