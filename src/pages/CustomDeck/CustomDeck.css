@@ -1,0 +1,389 @@
+/* Custom Deck Builder */
+.custom-deck-builder {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.builder-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.builder-header h1 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.back-btn {
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  background: var(--btn-bg);
+  color: var(--text-color);
+  border: 1px solid var(--btn-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.builder-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.builder-field label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: var(--muted-text);
+}
+
+.deck-name-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid var(--btn-border);
+  border-radius: 6px;
+  background: var(--btn-bg);
+  color: var(--text-color);
+  box-sizing: border-box;
+}
+
+.card-types-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.card-type-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.card-text-input {
+  flex: 1;
+  padding: 10px;
+  font-size: 0.95rem;
+  border: 1px solid var(--btn-border);
+  border-radius: 6px;
+  background: var(--btn-bg);
+  color: var(--text-color);
+}
+
+.card-count-control {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.card-count {
+  width: 24px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.die-btn.small {
+  width: 32px;
+  height: 32px;
+  font-size: 1.1rem;
+}
+
+.remove-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--btn-border);
+  border-radius: 6px;
+  background: var(--btn-bg);
+  color: var(--muted-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.add-card-type-btn {
+  padding: 10px;
+  font-size: 0.95rem;
+  background: transparent;
+  color: var(--roll-btn-bg);
+  border: 1px dashed var(--roll-btn-bg);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.builder-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--btn-border);
+  margin-top: auto;
+}
+
+.delete-btn {
+  padding: 12px;
+  font-size: 1rem;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Custom Deck Play */
+.custom-deck-play {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.custom-hand {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.custom-card {
+  min-width: 80px;
+  max-width: 120px;
+  min-height: 100px;
+  padding: 12px 8px;
+  background: var(--btn-bg);
+  border: 2px solid var(--btn-border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-card:active {
+  background: var(--btn-active);
+}
+
+.custom-card.card-placeholder {
+  min-width: 100px;
+  color: var(--muted-text);
+  cursor: default;
+}
+
+.custom-card-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.custom-history {
+  background: var(--results-bg);
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-custom-card {
+  display: inline-block;
+  padding: 4px 8px;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.modal-content {
+  background: var(--bg-color);
+  border-radius: 12px;
+  padding: 20px;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-content h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.edit-card-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid var(--btn-border);
+  border-radius: 6px;
+  background: var(--btn-bg);
+  color: var(--text-color);
+  box-sizing: border-box;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cancel-btn {
+  padding: 10px;
+  font-size: 0.95rem;
+  background: transparent;
+  color: var(--muted-text);
+  border: none;
+  cursor: pointer;
+}
+
+/* Shared styles */
+.deck-status {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: var(--muted-text);
+}
+
+.drawn-card-area {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+  min-height: 140px;
+}
+
+.draw-count-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.draw-label {
+  font-size: 0.95rem;
+  color: var(--text-color);
+}
+
+.draw-count {
+  width: 28px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.die-btn {
+  width: 40px;
+  height: 40px;
+  font-size: 1.3rem;
+  border: 1px solid var(--btn-border);
+  border-radius: 6px;
+  background: var(--btn-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.die-btn:active {
+  background: var(--btn-active);
+}
+
+.die-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.card-actions .roll-btn,
+.card-actions .clear-btn {
+  flex: 1;
+}
+
+.secondary-actions {
+  margin-top: 8px;
+}
+
+.card-options {
+  background: var(--results-bg);
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.card-options .setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-options .setting-label {
+  font-size: 0.95rem;
+}
+
+.card-options .toggle-btn {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  border: 1px solid var(--btn-border);
+  border-radius: 4px;
+  background: var(--btn-bg);
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.card-options .toggle-btn.toggle-on {
+  background: var(--roll-btn-bg);
+  color: white;
+  border-color: var(--roll-btn-bg);
+}
+
+.history-header {
+  font-size: 0.9rem;
+  color: var(--muted-text);
+}
+
+.history-draws {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-draw-group {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--btn-border);
+}
+
+.history-draw-group:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}

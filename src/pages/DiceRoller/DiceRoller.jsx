@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { DICE_ORDER, rollDice, createEmptyDiceState } from "../../utils/dice";
 import { playRollSound, vibrate } from "../../utils/sound";
 import "./DiceRoller.css";
@@ -6,9 +6,8 @@ import "./DiceRoller.css";
 const SHAKE_THRESHOLD = 25;
 const SHAKE_COOLDOWN = 1000;
 
-export function DiceRoller({ settings }) {
-  const [dice, setDice] = useState(createEmptyDiceState);
-  const [results, setResults] = useState([]);
+export function DiceRoller({ settings, state, onStateChange, onReset }) {
+  const { dice, results } = state;
 
   const hasAnyDice = Object.values(dice).some((count) => count > 0);
 
@@ -24,8 +23,8 @@ export function DiceRoller({ settings }) {
     }
 
     const newResults = rollDice(dice);
-    setResults(newResults);
-  }, [dice, settings.soundEnabled, settings.vibrateEnabled]);
+    onStateChange({ results: newResults });
+  }, [dice, settings.soundEnabled, settings.vibrateEnabled, onStateChange]);
 
   // Shake to roll effect
   useEffect(() => {
@@ -71,15 +70,19 @@ export function DiceRoller({ settings }) {
   }, [settings.shakeEnabled, roll]);
 
   const updateDie = (die, delta) => {
-    setDice((prev) => ({
-      ...prev,
-      [die]: Math.max(0, prev[die] + delta),
-    }));
+    onStateChange({
+      dice: {
+        ...dice,
+        [die]: Math.max(0, dice[die] + delta),
+      },
+    });
   };
 
   const clearDice = () => {
-    setDice(createEmptyDiceState());
-    setResults([]);
+    onStateChange({
+      dice: createEmptyDiceState(),
+      results: [],
+    });
   };
 
   const grandTotal = results.reduce((sum, r) => sum + r.total, 0);

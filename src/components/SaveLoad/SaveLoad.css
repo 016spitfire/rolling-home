@@ -1,0 +1,213 @@
+.save-load-modal {
+  background: var(--bg-color);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 360px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--btn-border);
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.close-modal-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--muted-text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.close-modal-btn:hover {
+  background: var(--btn-bg);
+}
+
+.modal-body {
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.new-save-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  background: transparent;
+  color: var(--roll-btn-bg);
+  border: 2px dashed var(--roll-btn-bg);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.new-save-btn:active {
+  background: var(--btn-bg);
+}
+
+.new-save-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.save-name-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid var(--btn-border);
+  border-radius: 6px;
+  background: var(--btn-bg);
+  color: var(--text-color);
+  box-sizing: border-box;
+}
+
+.new-save-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.new-save-actions .roll-btn,
+.new-save-actions .clear-btn {
+  flex: 1;
+  padding: 10px;
+}
+
+.no-saves {
+  text-align: center;
+  padding: 20px;
+  color: var(--muted-text);
+}
+
+.no-saves p {
+  margin: 0 0 8px 0;
+}
+
+.no-saves-hint {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+.saves-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.save-item {
+  background: var(--results-bg);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.save-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.save-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.save-date {
+  font-size: 0.8rem;
+  color: var(--muted-text);
+}
+
+.save-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  border: 1px solid var(--btn-border);
+  border-radius: 4px;
+  background: var(--btn-bg);
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.action-btn:active {
+  background: var(--btn-active);
+}
+
+.action-btn.delete {
+  color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+.confirm-btn {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.confirm-btn.load {
+  background: var(--roll-btn-bg);
+  color: white;
+}
+
+.confirm-btn.delete {
+  background: #d32f2f;
+  color: white;
+}
+
+/* FAB */
+.save-fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--roll-btn-bg);
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.save-fab:active {
+  background: var(--roll-btn-active);
+  transform: scale(0.95);
+}
+
+/* Adjust for install banner */
+.has-install-banner .save-fab {
+  bottom: 70px;
+}

@@ -1,9 +1,11 @@
 import "./Menu.css";
 
-export function Menu({ isOpen, onClose, currentPage, onNavigate }) {
-  const menuItems = [
-    { id: "home", label: "Home" },
-    { id: "settings", label: "Settings" },
+export function Menu({ isOpen, onClose, currentPage, onNavigate, customDecks = [] }) {
+  const baseMenuItems = [
+    { id: "dice", label: "Dice Roller" },
+    { id: "cards", label: "Card Picker" },
+    { id: "coin", label: "Coin Flip" },
+    { id: "tiles", label: "Tile Picker" },
   ];
 
   const handleNavigate = (pageId) => {
@@ -25,7 +27,7 @@ export function Menu({ isOpen, onClose, currentPage, onNavigate }) {
           <h2>Rolling Home</h2>
         </div>
         <ul className="menu-items">
-          {menuItems.map((item) => (
+          {baseMenuItems.map((item) => (
             <li key={item.id}>
               <button
                 className={`menu-item ${currentPage === item.id ? "menu-item-active" : ""}`}
@@ -35,6 +37,43 @@ export function Menu({ isOpen, onClose, currentPage, onNavigate }) {
               </button>
             </li>
           ))}
+          
+          {customDecks.length > 0 && (
+            <li className="menu-divider">
+              <span>Custom Decks</span>
+            </li>
+          )}
+          
+          {customDecks.map((deck) => (
+            <li key={deck.id}>
+              <button
+                className={`menu-item ${currentPage === deck.id ? "menu-item-active" : ""}`}
+                onClick={() => handleNavigate(deck.id)}
+              >
+                {deck.name}
+              </button>
+            </li>
+          ))}
+          
+          <li>
+            <button
+              className={`menu-item menu-item-add ${currentPage === "new-custom-deck" ? "menu-item-active" : ""}`}
+              onClick={() => handleNavigate("new-custom-deck")}
+            >
+              + New Custom Deck
+            </button>
+          </li>
+          
+          <li className="menu-divider"></li>
+          
+          <li>
+            <button
+              className={`menu-item ${currentPage === "settings" ? "menu-item-active" : ""}`}
+              onClick={() => handleNavigate("settings")}
+            >
+              Settings
+            </button>
+          </li>
         </ul>
       </nav>
     </>

@@ -1,13 +1,50 @@
 import { useState, useEffect } from "react";
 import { Menu } from "./components/Menu/Menu";
+import { SaveLoadModal } from "./components/SaveLoad/SaveLoadModal";
 import { DiceRoller } from "./pages/DiceRoller/DiceRoller";
+import { CardPicker } from "./pages/CardPicker/CardPicker";
+import { CoinFlipper } from "./pages/CoinFlipper/CoinFlipper";
+import { TilePicker } from "./pages/TilePicker/TilePicker";
+import { CustomDeckBuilder } from "./pages/CustomDeck/CustomDeckBuilder";
+import { CustomDeckPlay } from "./pages/CustomDeck/CustomDeckPlay";
 import { Settings } from "./pages/Settings/Settings";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useToolStates } from "./hooks/useToolStates";
 import { DICE_ORDER } from "./utils/dice";
 import "./App.css";
+import "./components/SaveLoad/SaveLoad.css";
 
 type ThemeMode = "light" | "dark" | "system";
-type PageId = "home" | "settings";
+
+const PAGE_TITLES: Record<string, string> = {
+  dice: "Dice Roller",
+  cards: "Card Picker",
+  coin: "Coin Flip",
+  tiles: "Tile Picker",
+  settings: "Settings",
+  "new-custom-deck": "New Custom Deck",
+};
+
+const VALID_PAGES = ["dice", "cards", "coin", "tiles", "settings", "new-custom-deck"];
+
+// Pages where the FAB should be shown
+const FAB_PAGES = ["dice", "cards", "coin", "tiles"];
+
+function getPageFromHash(): string {
+  const hash = window.location.hash.replace("#/", "");
+  if (!hash) return "dice";
+  if (hash.startsWith("deck-") || hash.startsWith("edit-deck-")) {
+    return hash;
+  }
+  if (VALID_PAGES.includes(hash)) {
+    return hash;
+  }
+  return "dice";
+}
+
+function setHashForPage(pageId: string) {
+  window.location.hash = "/" + pageId;
+}
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -41,16 +78,29 @@ function getSystemTheme(): "light" | "dark" {
 }
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<PageId>("home");
+  const [currentPage, setCurrentPage] = useState<string>(getPageFromHash);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [settings, setSettings] = useLocalStorage(
     "app-settings",
     defaultSettings,
   );
 
+  const toolStates = useToolStates();
+
   const [installPrompt, setInstallPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
+
+  // Hash change listener
+  useEffect(() => {
+    const handleHashChange = () => {
+      setCurrentPage(getPageFromHash());
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
 
   // Theme effect
   useEffect(() => {
@@ -101,36 +151,154 @@ function App() {
     setSettings((prev: AppSettings) => ({ ...prev, ...updates }));
   };
 
-  const handleNavigate = (pageId: PageId) => {
+  const handleNavigate = (pageId: string) => {
+    setHashForPage(pageId);
     setCurrentPage(pageId);
   };
 
+  const getPageTitle = () => {
+    if (PAGE_TITLES[currentPage]) {
+      return PAGE_TITLES[currentPage];
+    }
+    if (currentPage.startsWith("deck-")) {
+      const deck = toolStates.customDecks.find((d: any) => d.id === currentPage);
+      return deck?.name || "Custom Deck";
+    }
+    if (currentPage.startsWith("edit-deck-")) {
+      return "Edit Deck";
+    }
+    return "Rolling Home";
+  };
+
   const renderPage = () => {
+    if (currentPage.startsWith("edit-deck-")) {
+      const deckId = currentPage.replace("edit-deck-", "");
+      const deck = toolStates.customDecks.find((d: any) => d.id === deckId);
+      if (deck) {
+        return (
+          <CustomDeckBuilder
+            existingDeck={deck}
+            onSave={(updates: any) => {
+              toolStates.updateCustomDeck(deckId, updates);
+              handleNavigate(deckId);
+            }}
+            // @ts-ignore - optional prop
+            onDelete={() => {
+              toolStates.deleteCustomDeck(deckId);
+              handleNavigate("dice");
+            }}
+            onCancel={() => handleNavigate(deckId)}
+          />
+        );
+      }
+    }
+
+    if (currentPage.startsWith("deck-")) {
+      const deck = toolStates.customDecks.find((d: any) => d.id === currentPage);
+      if (deck) {
+        return (
+          <CustomDeckPlay
+            deck={deck}
+            settings={settings}
+            onUpdate={(updates: any) => toolStates.updateCustomDeck(currentPage, updates)}
+            onEdit={() => handleNavigate("edit-" + currentPage)}
+          />
+        );
+      }
+    }
+
     switch (currentPage) {
       case "settings":
         return (
           <Settings
             settings={settings}
             onSettingsChange={handleSettingsChange}
-            onBack={() => setCurrentPage("home")}
+            onBack={() => handleNavigate("dice")}
           />
         );
-      case "home":
+      case "cards":
+        return (
+          <CardPicker
+            settings={settings}
+            state={toolStates.cardState}
+            onStateChange={toolStates.updateCardState}
+            onReset={toolStates.resetCards}
+            shuffleArray={toolStates.shuffleArray}
+            createFullDeck={toolStates.createFullDeck}
+          />
+        );
+      case "coin":
+        return (
+          <CoinFlipper
+            settings={settings}
+            state={toolStates.coinState}
+            onStateChange={toolStates.updateCoinState}
+            onReset={toolStates.resetCoins}
+          />
+        );
+      case "tiles":
+        return (
+          <TilePicker
+            settings={settings}
+            state={toolStates.tileState}
+            onStateChange={toolStates.updateTileState}
+            onReset={toolStates.resetTiles}
+            shuffleArray={toolStates.shuffleArray}
+            createFullTileSet={toolStates.createFullTileSet}
+          />
+        );
+      case "new-custom-deck":
+        return (
+          <CustomDeckBuilder
+            onSave={(deck: any) => {
+              const newId = toolStates.addCustomDeck(deck);
+              handleNavigate(newId);
+            }}
+            onCancel={() => handleNavigate("dice")}
+          />
+        );
+      case "dice":
       default:
-        return <DiceRoller settings={settings} />;
+        return (
+          <DiceRoller
+            settings={settings}
+            state={toolStates.diceState}
+            onStateChange={toolStates.updateDiceState}
+            onReset={toolStates.resetDice}
+          />
+        );
     }
   };
 
+  const showHeader = currentPage !== "settings" && !currentPage.startsWith("edit-deck-") && currentPage !== "new-custom-deck";
+  const showFab = FAB_PAGES.includes(currentPage) || currentPage.startsWith("deck-");
+
   return (
-    <div className="app">
+    <div className={"app" + (showInstallBanner ? " has-install-banner" : "")}>
       <Menu
         isOpen={menuOpen}
         onClose={() => setMenuOpen(false)}
         currentPage={currentPage}
         onNavigate={handleNavigate}
+        customDecks={toolStates.customDecks}
       />
 
-      {currentPage === "home" && (
+      <SaveLoadModal
+        isOpen={saveModalOpen}
+        onClose={() => setSaveModalOpen(false)}
+        saves={toolStates.savedGames}
+        onSave={(name: string | null, existingId?: string) => {
+          if (existingId) { (toolStates.saveGame as any)(null, existingId); } else if (name) { toolStates.saveGame(name); }
+        }}
+        onLoad={(saveId: string) => {
+          toolStates.loadGame(saveId);
+        }}
+        onDelete={(saveId: string) => {
+          toolStates.deleteGame(saveId);
+        }}
+      />
+
+      {showHeader && (
         <header className="header">
           <button
             className="menu-btn"
@@ -139,16 +307,26 @@ function App() {
           >
             ☰
           </button>
-          <h1>Rolling Home</h1>
+          <h1>{getPageTitle()}</h1>
           <div style={{ width: 36 }}></div>
         </header>
       )}
 
       <main className="main-content">{renderPage()}</main>
 
+      {showFab && (
+        <button
+          className="save-fab"
+          onClick={() => setSaveModalOpen(true)}
+          aria-label="Save/Load game"
+        >
+          💾
+        </button>
+      )}
+
       {showInstallBanner && (
         <div className="install-banner">
-          <span>Install Rolling Home for quick access</span>
+          <span>Install for quick access</span>
           <div className="install-banner-buttons">
             <button className="install-btn" onClick={handleInstall}>
               Install

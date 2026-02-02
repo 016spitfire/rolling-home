@@ -76,3 +76,24 @@
   font-weight: 600;
   color: var(--roll-btn-bg);
 }
+
+
+.menu-divider {
+  padding: 12px 16px 6px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted-text);
+  border-top: 1px solid var(--btn-border);
+  margin-top: 8px;
+}
+
+.menu-divider:empty {
+  padding: 0;
+  margin-top: 8px;
+}
+
+.menu-item-add {
+  color: var(--roll-btn-bg);
+  font-weight: 500;
+}
