@@ -8,6 +8,9 @@ import { TilePicker } from "./pages/TilePicker/TilePicker";
 import { CustomDeckBuilder } from "./pages/CustomDeck/CustomDeckBuilder";
 import { CustomDeckPlay } from "./pages/CustomDeck/CustomDeckPlay";
 import { Settings } from "./pages/Settings/Settings";
+import { GameTemplateBuilder } from "./pages/GameTemplate/GameTemplateBuilder";
+import { GameTemplateRunner } from "./pages/GameTemplate/GameTemplateRunner";
+import { GameTemplateDetail } from "./pages/GameTemplate/GameTemplateDetail";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useToolStates } from "./hooks/useToolStates";
 import { DICE_ORDER } from "./utils/dice";
@@ -23,9 +26,10 @@ const PAGE_TITLES: Record<string, string> = {
   tiles: "Tile Picker",
   settings: "Settings",
   "new-custom-deck": "New Custom Deck",
+  "new-template": "New Game Template",
 };
 
-const VALID_PAGES = ["dice", "cards", "coin", "tiles", "settings", "new-custom-deck"];
+const VALID_PAGES = ["dice", "cards", "coin", "tiles", "settings", "new-custom-deck", "new-template"];
 
 // Pages where the FAB should be shown
 const FAB_PAGES = ["dice", "cards", "coin", "tiles"];
@@ -34,6 +38,9 @@ function getPageFromHash(): string {
   const hash = window.location.hash.replace("#/", "");
   if (!hash) return "dice";
   if (hash.startsWith("deck-") || hash.startsWith("edit-deck-")) {
+    return hash;
+  }
+  if (hash.startsWith("template-") || hash.startsWith("edit-template-") || hash.startsWith("run-template-")) {
     return hash;
   }
   if (VALID_PAGES.includes(hash)) {
@@ -167,10 +174,74 @@ function App() {
     if (currentPage.startsWith("edit-deck-")) {
       return "Edit Deck";
     }
+    if (currentPage.startsWith("template-")) {
+      const template = toolStates.gameTemplates.find((t: any) => t.id === currentPage);
+      return template?.name || "Game Template";
+    }
+    if (currentPage.startsWith("edit-template-")) {
+      return "Edit Template";
+    }
+    if (currentPage.startsWith("run-template-")) {
+      const templateId = currentPage.replace("run-", "");
+      const template = toolStates.gameTemplates.find((t: any) => t.id === templateId);
+      return template?.name || "Running Template";
+    }
     return "Rolling Home";
   };
 
   const renderPage = () => {
+    // Game Template routes
+    if (currentPage.startsWith("run-template-")) {
+      const templateId = currentPage.replace("run-", "");
+      const template = toolStates.gameTemplates.find((t: any) => t.id === templateId);
+      if (template) {
+        return (
+          <GameTemplateRunner
+            template={template}
+            settings={settings}
+            toolStates={toolStates}
+            onExit={() => handleNavigate(templateId)}
+          />
+        );
+      }
+    }
+
+    if (currentPage.startsWith("edit-template-")) {
+      const templateId = currentPage.replace("edit-template-", "");
+      const template = toolStates.gameTemplates.find((t: any) => t.id === templateId);
+      if (template) {
+        return (
+          <GameTemplateBuilder
+            existingTemplate={template}
+            customDecks={toolStates.customDecks}
+            onSave={(updates: any) => {
+              toolStates.updateGameTemplate(templateId, updates);
+              handleNavigate(templateId);
+            }}
+            // @ts-ignore - optional prop
+            onDelete={() => {
+              toolStates.deleteGameTemplate(templateId);
+              handleNavigate("dice");
+            }}
+            onCancel={() => handleNavigate(templateId)}
+          />
+        );
+      }
+    }
+
+    if (currentPage.startsWith("template-")) {
+      const template = toolStates.gameTemplates.find((t: any) => t.id === currentPage);
+      if (template) {
+        return (
+          <GameTemplateDetail
+            template={template}
+            onRun={() => handleNavigate("run-" + currentPage)}
+            onEdit={() => handleNavigate("edit-" + currentPage)}
+          />
+        );
+      }
+    }
+
     if (currentPage.startsWith("edit-deck-")) {
       const deckId = currentPage.replace("edit-deck-", "");
       const deck = toolStates.customDecks.find((d: any) => d.id === deckId);
@@ -257,6 +328,17 @@ function App() {
             onCancel={() => handleNavigate("dice")}
           />
         );
+      case "new-template":
+        return (
+          <GameTemplateBuilder
+            customDecks={toolStates.customDecks}
+            onSave={(template: any) => {
+              const newId = toolStates.addGameTemplate(template);
+              handleNavigate(newId);
+            }}
+            onCancel={() => handleNavigate("dice")}
+          />
+        );
       case "dice":
       default:
         return (
@@ -270,8 +352,8 @@ function App() {
     }
   };
 
-  const showHeader = currentPage !== "settings" && !currentPage.startsWith("edit-deck-") && currentPage !== "new-custom-deck";
-  const showFab = FAB_PAGES.includes(currentPage) || currentPage.startsWith("deck-");
+  const showHeader = currentPage !== "settings" && !currentPage.startsWith("edit-deck-") && currentPage !== "new-custom-deck" && !currentPage.startsWith("edit-template-") && currentPage !== "new-template" && !currentPage.startsWith("run-template-");
+  const showFab = FAB_PAGES.includes(currentPage) || currentPage.startsWith("deck-") || currentPage.startsWith("template-");
 
   return (
     <div className={"app" + (showInstallBanner ? " has-install-banner" : "")}>
@@ -281,6 +363,7 @@ function App() {
         currentPage={currentPage}
         onNavigate={handleNavigate}
         customDecks={toolStates.customDecks}
+        gameTemplates={toolStates.gameTemplates}
       />
 
       <SaveLoadModal

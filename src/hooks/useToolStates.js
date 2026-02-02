@@ -5,6 +5,28 @@ import { useLocalStorage } from './useLocalStorage';
 const DICE_ORDER = ['d4', 'd6', 'd8', 'd10', 'd12', 'd20', 'd100'];
 
 function createEmptyDiceState() {
+
+  // Game template actions
+  const addGameTemplate = useCallback((template) => {
+    const newTemplate = {
+      ...template,
+      id: 'template-' + Date.now(),
+      createdAt: Date.now(),
+    };
+    setGameTemplates(prev => [...prev, newTemplate]);
+    return newTemplate.id;
+  }, [setGameTemplates]);
+
+  const updateGameTemplate = useCallback((templateId, updates) => {
+    setGameTemplates(prev => prev.map(t =>
+      t.id === templateId ? { ...t, ...updates } : t
+    ));
+  }, [setGameTemplates]);
+
+  const deleteGameTemplate = useCallback((templateId) => {
+    setGameTemplates(prev => prev.filter(t => t.id !== templateId));
+  }, [setGameTemplates]);
+
   return { d4: 0, d6: 0, d8: 0, d10: 0, d12: 0, d20: 0, d100: 0 };
 }
 
@@ -98,6 +120,9 @@ export function useToolStates() {
 
   // Saved games stored in localStorage
   const [savedGames, setSavedGames] = useLocalStorage('saved-games', []);
+
+  // Game templates stored in localStorage
+  const [gameTemplates, setGameTemplates] = useLocalStorage('game-templates', []);
 
   // Dice actions
   const updateDiceState = useCallback((updates) => {
@@ -210,6 +235,28 @@ export function useToolStates() {
     setSavedGames(prev => prev.filter(s => s.id !== saveId));
   }, [setSavedGames]);
 
+
+  // Game template actions
+  const addGameTemplate = useCallback((template) => {
+    const newTemplate = {
+      ...template,
+      id: 'template-' + Date.now(),
+      createdAt: Date.now(),
+    };
+    setGameTemplates(prev => [...prev, newTemplate]);
+    return newTemplate.id;
+  }, [setGameTemplates]);
+
+  const updateGameTemplate = useCallback((templateId, updates) => {
+    setGameTemplates(prev => prev.map(t =>
+      t.id === templateId ? { ...t, ...updates } : t
+    ));
+  }, [setGameTemplates]);
+
+  const deleteGameTemplate = useCallback((templateId) => {
+    setGameTemplates(prev => prev.filter(t => t.id !== templateId));
+  }, [setGameTemplates]);
+
   return {
     // Dice
     diceState,
@@ -242,6 +289,12 @@ export function useToolStates() {
     saveGame,
     loadGame,
     deleteGame,
+
+    // Game templates
+    gameTemplates,
+    addGameTemplate,
+    updateGameTemplate,
+    deleteGameTemplate,
 
     // Utilities for components
     shuffleArray,

@@ -1,6 +1,6 @@
 import "./Menu.css";
 
-export function Menu({ isOpen, onClose, currentPage, onNavigate, customDecks = [] }) {
+export function Menu({ isOpen, onClose, currentPage, onNavigate, customDecks = [], gameTemplates = [] }) {
   const baseMenuItems = [
     { id: "dice", label: "Dice Roller" },
     { id: "cards", label: "Card Picker" },
@@ -37,13 +37,13 @@ export function Menu({ isOpen, onClose, currentPage, onNavigate, customDecks = [
               </button>
             </li>
           ))}
-          
+
           {customDecks.length > 0 && (
             <li className="menu-divider">
               <span>Custom Decks</span>
             </li>
           )}
-          
+
           {customDecks.map((deck) => (
             <li key={deck.id}>
               <button
@@ -54,7 +54,7 @@ export function Menu({ isOpen, onClose, currentPage, onNavigate, customDecks = [
               </button>
             </li>
           ))}
-          
+
           <li>
             <button
               className={`menu-item menu-item-add ${currentPage === "new-custom-deck" ? "menu-item-active" : ""}`}
@@ -63,9 +63,33 @@ export function Menu({ isOpen, onClose, currentPage, onNavigate, customDecks = [
               + New Custom Deck
             </button>
           </li>
-          
+
+          <li className="menu-divider">
+            <span>Game Templates</span>
+          </li>
+
+          {gameTemplates.map((template) => (
+            <li key={template.id}>
+              <button
+                className={`menu-item ${currentPage === template.id || currentPage === "run-" + template.id ? "menu-item-active" : ""}`}
+                onClick={() => handleNavigate(template.id)}
+              >
+                {template.name}
+              </button>
+            </li>
+          ))}
+
+          <li>
+            <button
+              className={`menu-item menu-item-add ${currentPage === "new-template" ? "menu-item-active" : ""}`}
+              onClick={() => handleNavigate("new-template")}
+            >
+              + New Game Template
+            </button>
+          </li>
+
           <li className="menu-divider"></li>
-          
+
           <li>
             <button
               className={`menu-item ${currentPage === "settings" ? "menu-item-active" : ""}`}
