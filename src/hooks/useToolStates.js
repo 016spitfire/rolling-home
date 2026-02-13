@@ -74,6 +74,7 @@ const defaultDiceState = {
   dice: createEmptyDiceState(),
   results: [],
   history: [],
+  rollId: 0,
 };
 
 const defaultCardState = {

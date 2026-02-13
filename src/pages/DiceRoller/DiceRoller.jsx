@@ -8,7 +8,7 @@ const SHAKE_THRESHOLD = 25;
 const SHAKE_COOLDOWN = 1000;
 
 export function DiceRoller({ settings, state, onStateChange, onReset }) {
-  const { dice, results, history } = state;
+  const { dice, results, history, rollId } = state;
 
   const hasAnyDice = Object.values(dice).some((count) => count > 0);
 
@@ -29,10 +29,12 @@ export function DiceRoller({ settings, state, onStateChange, onReset }) {
     onStateChange({
       results: newResults,
       history: [historyEntry, ...(history || [])].slice(0, 20),
+      rollId: (rollId || 0) + 1,
     });
   }, [
     dice,
     history,
+    rollId,
     settings.soundEnabled,
     settings.vibrateEnabled,
     onStateChange,
@@ -109,7 +111,7 @@ export function DiceRoller({ settings, state, onStateChange, onReset }) {
 
   return (
     <div className="dice-roller">
-      <DiceTray results={results} history={history} />
+      <DiceTray results={results} history={history} rollId={rollId} />
 
       <div className="dice-roller-main">
         <div className="dice-selector">

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import "./DiceTray.css";
 
 const DIE_SHAPES = {
@@ -10,14 +11,15 @@ const DIE_SHAPES = {
   d100: "circle(50%)",
 };
 
-function DieShape({ die, value, rotation }) {
+function DieShape({ die, value, rotation, settling }) {
   const clipPath = DIE_SHAPES[die];
   const isSquare = die === "d6";
+  const currentRotation = settling ? 0 : rotation;
 
   return (
     <div
       className={`die-shape die-shape-${die}`}
-      style={{ transform: `rotate(${rotation}deg)` }}
+      style={{ transform: `rotate(${currentRotation}deg)` }}
     >
       <div
         className="die-shape-bg"
@@ -25,7 +27,7 @@ function DieShape({ die, value, rotation }) {
       />
       <span
         className="die-shape-value"
-        style={{ transform: `rotate(${-rotation}deg)` }}
+        style={{ transform: `rotate(${-currentRotation}deg)` }}
       >
         {value}
       </span>
@@ -33,12 +35,21 @@ function DieShape({ die, value, rotation }) {
   );
 }
 
-function getRotation(index) {
-  const rotations = [-12, 8, -5, 15, -8, 3, -15, 10, -3, 18];
-  return rotations[index % rotations.length];
+function getRotation() {
+  return Math.floor(Math.random() * 37) - 18;
 }
 
-export function DiceTray({ results, history }) {
+export function DiceTray({ results, history, rollId }) {
+  const [settling, setSettling] = useState(false);
+
+  useEffect(() => {
+    if (rollId > 0) {
+      setSettling(true);
+      const timer = setTimeout(() => setSettling(false), 150);
+      return () => clearTimeout(timer);
+    }
+  }, [rollId]);
+
   const allDice = [];
   if (results.length > 0) {
     let index = 0;
@@ -56,12 +67,11 @@ export function DiceTray({ results, history }) {
   }
 
   const totalRolls = history.reduce(
-    (sum, entry) =>
-      sum + entry.results.reduce((s, r) => s + r.rolls.length, 0),
-    0
+    (sum, entry) => sum + entry.results.reduce((s, r) => s + r.rolls.length, 0),
+    0,
   );
   const allValues = history.flatMap((entry) =>
-    entry.results.flatMap((r) => r.rolls)
+    entry.results.flatMap((r) => r.rolls),
   );
   const highest = allValues.length > 0 ? Math.max(...allValues) : null;
   const lowest = allValues.length > 0 ? Math.min(...allValues) : null;
@@ -83,6 +93,7 @@ export function DiceTray({ results, history }) {
                 die={d.die}
                 value={d.value}
                 rotation={d.rotation}
+                settling={settling}
               />
             ))}
           </div>
