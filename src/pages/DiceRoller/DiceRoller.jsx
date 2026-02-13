@@ -1,13 +1,14 @@
 import { useCallback, useEffect } from "react";
 import { DICE_ORDER, rollDice, createEmptyDiceState } from "../../utils/dice";
 import { playRollSound, vibrate } from "../../utils/sound";
+import { DiceTray } from "../../components/DiceTray/DiceTray";
 import "./DiceRoller.css";
 
 const SHAKE_THRESHOLD = 25;
 const SHAKE_COOLDOWN = 1000;
 
 export function DiceRoller({ settings, state, onStateChange, onReset }) {
-  const { dice, results } = state;
+  const { dice, results, history } = state;
 
   const hasAnyDice = Object.values(dice).some((count) => count > 0);
 
@@ -23,15 +24,28 @@ export function DiceRoller({ settings, state, onStateChange, onReset }) {
     }
 
     const newResults = rollDice(dice);
-    onStateChange({ results: newResults });
-  }, [dice, settings.soundEnabled, settings.vibrateEnabled, onStateChange]);
+    const total = newResults.reduce((sum, r) => sum + r.total, 0);
+    const historyEntry = { results: newResults, total, timestamp: Date.now() };
+    onStateChange({
+      results: newResults,
+      history: [historyEntry, ...(history || [])].slice(0, 20),
+    });
+  }, [
+    dice,
+    history,
+    settings.soundEnabled,
+    settings.vibrateEnabled,
+    onStateChange,
+  ]);
 
   // Shake to roll effect
   useEffect(() => {
     if (!settings.shakeEnabled) return;
 
     let lastShake = 0;
-    let lastX = 0, lastY = 0, lastZ = 0;
+    let lastX = 0,
+      lastY = 0,
+      lastZ = 0;
     let initialized = false;
 
     const handleMotion = (event) => {
@@ -82,7 +96,12 @@ export function DiceRoller({ settings, state, onStateChange, onReset }) {
     onStateChange({
       dice: createEmptyDiceState(),
       results: [],
+      history: [],
     });
+  };
+
+  const clearHistory = () => {
+    onStateChange({ history: [] });
   };
 
   const grandTotal = results.reduce((sum, r) => sum + r.total, 0);
@@ -90,51 +109,86 @@ export function DiceRoller({ settings, state, onStateChange, onReset }) {
 
   return (
     <div className="dice-roller">
-      <div className="dice-selector">
-        {visibleDice.map((die) => (
-          <div key={die} className="die-row">
-            <span className="die-label">{die}</span>
-            <button
-              className="die-btn"
-              onClick={() => updateDie(die, -1)}
-              disabled={dice[die] === 0}
-            >
-              −
-            </button>
-            <span className="die-count">{dice[die]}</span>
-            <button className="die-btn" onClick={() => updateDie(die, 1)}>
-              +
-            </button>
-          </div>
-        ))}
-      </div>
+      <DiceTray results={results} history={history} />
 
-      <div className="action-buttons">
-        <button className="roll-btn" onClick={roll} disabled={!hasAnyDice}>
-          Roll
-        </button>
-        <button
-          className="clear-btn"
-          onClick={clearDice}
-          disabled={!hasAnyDice}
-        >
-          Clear
-        </button>
-      </div>
-
-      {results.length > 0 && (
-        <div className="results">
-          <h2>Results</h2>
-          {results.map((result) => (
-            <div key={result.die} className="result-row">
-              <span className="result-die">{result.die}:</span>
-              <span className="result-rolls">{result.rolls.join(", ")}</span>
-              <span className="result-total">({result.total})</span>
+      <div className="dice-roller-main">
+        <div className="dice-selector">
+          {visibleDice.map((die) => (
+            <div key={die} className="die-row">
+              <span className="die-label">{die}</span>
+              <button
+                className="die-btn"
+                onClick={() => updateDie(die, -1)}
+                disabled={dice[die] === 0}
+              >
+                −
+              </button>
+              <span className="die-count">{dice[die]}</span>
+              <button className="die-btn" onClick={() => updateDie(die, 1)}>
+                +
+              </button>
             </div>
           ))}
-          <div className="grand-total">Total: {grandTotal}</div>
         </div>
-      )}
+
+        <div className="action-buttons">
+          <button className="roll-btn" onClick={roll} disabled={!hasAnyDice}>
+            Roll
+          </button>
+          <button
+            className="clear-btn"
+            onClick={clearDice}
+            disabled={!hasAnyDice}
+          >
+            Clear
+          </button>
+        </div>
+
+        {results.length > 0 && (
+          <div className="results">
+            <h2>Results</h2>
+            {results.map((result) => (
+              <div key={result.die} className="result-row">
+                <span className="result-die">{result.die}:</span>
+                <span className="result-rolls">{result.rolls.join(", ")}</span>
+                <span className="result-total">({result.total})</span>
+              </div>
+            ))}
+            <div className="grand-total">Total: {grandTotal}</div>
+          </div>
+        )}
+      </div>
+
+      <div className="dice-history">
+        <div className="history-header">
+          <span>History{history.length > 0 ? ` (${history.length})` : ""}</span>
+        </div>
+        {history.length > 0 ? (
+          <>
+            <div className="history-rolls">
+              {history.map((entry, i) => (
+                <div key={entry.timestamp + "-" + i} className="history-entry">
+                  <div className="history-entry-dice">
+                    {entry.results.map((r) => (
+                      <span key={r.die} className="history-die-result">
+                        {r.die}: {r.rolls.join(", ")}
+                      </span>
+                    ))}
+                  </div>
+                  <span className="history-entry-total">{entry.total}</span>
+                </div>
+              ))}
+            </div>
+            <button className="clear-btn" onClick={clearHistory}>
+              Clear History
+            </button>
+          </>
+        ) : (
+          <div className="history-empty">
+            Roll some dice to see your history here.
+          </div>
+        )}
+      </div>
     </div>
   );
 }
