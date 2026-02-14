@@ -1,10 +1,15 @@
 import { useState } from "react";
 import "./CustomDeck.css";
 
-export function CustomDeckBuilder({ existingDeck = null, onSave, onDelete = null, onCancel }) {
+export function CustomDeckBuilder({
+  existingDeck = null,
+  onSave,
+  onDelete = null,
+  onCancel,
+}) {
   const [name, setName] = useState(existingDeck?.name || "");
   const [cardTypes, setCardTypes] = useState(
-    existingDeck?.cardTypes || [{ id: "type-1", text: "", count: 1 }]
+    existingDeck?.cardTypes || [{ id: "type-1", text: "", count: 1 }],
   );
 
   const addCardType = () => {
@@ -15,7 +20,9 @@ export function CustomDeckBuilder({ existingDeck = null, onSave, onDelete = null
   };
 
   const updateCardType = (id, updates) => {
-    setCardTypes(cardTypes.map((ct) => (ct.id === id ? { ...ct, ...updates } : ct)));
+    setCardTypes(
+      cardTypes.map((ct) => (ct.id === id ? { ...ct, ...updates } : ct)),
+    );
   };
 
   const removeCardType = (id) => {
@@ -25,7 +32,9 @@ export function CustomDeckBuilder({ existingDeck = null, onSave, onDelete = null
 
   const handleSave = () => {
     if (!name.trim()) return;
-    const validCardTypes = cardTypes.filter((ct) => ct.text.trim() && ct.count > 0);
+    const validCardTypes = cardTypes.filter(
+      (ct) => ct.text.trim() && ct.count > 0,
+    );
     if (validCardTypes.length === 0) return;
 
     // Build the actual deck from card types
@@ -54,7 +63,8 @@ export function CustomDeckBuilder({ existingDeck = null, onSave, onDelete = null
   };
 
   const totalCards = cardTypes.reduce((sum, ct) => sum + (ct.count || 0), 0);
-  const isValid = name.trim() && cardTypes.some((ct) => ct.text.trim() && ct.count > 0);
+  const isValid =
+    name.trim() && cardTypes.some((ct) => ct.text.trim() && ct.count > 0);
 
   return (
     <div className="custom-deck-builder">
@@ -86,22 +96,30 @@ export function CustomDeckBuilder({ existingDeck = null, onSave, onDelete = null
                 <input
                   type="text"
                   value={ct.text}
-                  onChange={(e) => updateCardType(ct.id, { text: e.target.value })}
+                  onChange={(e) =>
+                    updateCardType(ct.id, { text: e.target.value })
+                  }
                   placeholder="Card text..."
                   className="card-text-input"
                 />
                 <div className="card-count-control">
                   <button
-                    className="die-btn small"
-                    onClick={() => updateCardType(ct.id, { count: Math.max(1, ct.count - 1) })}
+                    className="inc-btn small"
+                    onClick={() =>
+                      updateCardType(ct.id, {
+                        count: Math.max(1, ct.count - 1),
+                      })
+                    }
                     disabled={ct.count <= 1}
                   >
                     −
                   </button>
                   <span className="card-count">{ct.count}</span>
                   <button
-                    className="die-btn small"
-                    onClick={() => updateCardType(ct.id, { count: ct.count + 1 })}
+                    className="inc-btn small"
+                    onClick={() =>
+                      updateCardType(ct.id, { count: ct.count + 1 })
+                    }
                   >
                     +
                   </button>
@@ -123,7 +141,7 @@ export function CustomDeckBuilder({ existingDeck = null, onSave, onDelete = null
       </div>
 
       <div className="builder-actions">
-        <button className="roll-btn" onClick={handleSave} disabled={!isValid}>
+        <button className="action-btn" onClick={handleSave} disabled={!isValid}>
           {existingDeck ? "Save Changes" : "Create Deck"}
         </button>
         {existingDeck && onDelete && (

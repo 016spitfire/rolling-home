@@ -1,7 +1,14 @@
 import { useState } from "react";
 import "./SaveLoad.css";
 
-export function SaveLoadModal({ isOpen, onClose, saves, onSave, onLoad, onDelete }) {
+export function SaveLoadModal({
+  isOpen,
+  onClose,
+  saves,
+  onSave,
+  onLoad,
+  onDelete,
+}) {
   const [newSaveName, setNewSaveName] = useState("");
   const [showNewSave, setShowNewSave] = useState(false);
   const [confirmLoad, setConfirmLoad] = useState(null);
@@ -56,7 +63,9 @@ export function SaveLoadModal({ isOpen, onClose, saves, onSave, onLoad, onDelete
       <div className="save-load-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Saved Games</h2>
-          <button className="close-modal-btn" onClick={onClose}>✕</button>
+          <button className="close-modal-btn" onClick={onClose}>
+            ✕
+          </button>
         </div>
 
         <div className="modal-body">
@@ -72,16 +81,29 @@ export function SaveLoadModal({ isOpen, onClose, saves, onSave, onLoad, onDelete
                 autoFocus
               />
               <div className="new-save-actions">
-                <button className="roll-btn" onClick={handleNewSave} disabled={!newSaveName.trim()}>
+                <button
+                  className="action-btn"
+                  onClick={handleNewSave}
+                  disabled={!newSaveName.trim()}
+                >
                   Save
                 </button>
-                <button className="clear-btn" onClick={() => { setShowNewSave(false); setNewSaveName(""); }}>
+                <button
+                  className="clear-btn"
+                  onClick={() => {
+                    setShowNewSave(false);
+                    setNewSaveName("");
+                  }}
+                >
                   Cancel
                 </button>
               </div>
             </div>
           ) : (
-            <button className="new-save-btn" onClick={() => setShowNewSave(true)}>
+            <button
+              className="new-save-btn"
+              onClick={() => setShowNewSave(true)}
+            >
               + New Save
             </button>
           )}
@@ -90,7 +112,9 @@ export function SaveLoadModal({ isOpen, onClose, saves, onSave, onLoad, onDelete
           {saves.length === 0 ? (
             <div className="no-saves">
               <p>No saved games yet.</p>
-              <p className="no-saves-hint">Create a new save to store your current game state.</p>
+              <p className="no-saves-hint">
+                Create a new save to store your current game state.
+              </p>
             </div>
           ) : (
             <div className="saves-list">
@@ -98,27 +122,44 @@ export function SaveLoadModal({ isOpen, onClose, saves, onSave, onLoad, onDelete
                 <div key={save.id} className="save-item">
                   <div className="save-info">
                     <span className="save-name">{save.name}</span>
-                    <span className="save-date">Last saved: {formatDate(save.timestamp)}</span>
+                    <span className="save-date">
+                      Last saved: {formatDate(save.timestamp)}
+                    </span>
                   </div>
                   <div className="save-actions">
                     {confirmLoad === save.id ? (
-                      <button className="confirm-btn load" onClick={() => handleLoad(save.id)}>
+                      <button
+                        className="confirm-btn load"
+                        onClick={() => handleLoad(save.id)}
+                      >
                         Confirm Load?
                       </button>
                     ) : (
-                      <button className="action-btn" onClick={() => handleLoad(save.id)}>
+                      <button
+                        className="save-action-btn"
+                        onClick={() => handleLoad(save.id)}
+                      >
                         Load
                       </button>
                     )}
-                    <button className="action-btn" onClick={() => handleOverwrite(save.id)}>
+                    <button
+                      className="save-action-btn"
+                      onClick={() => handleOverwrite(save.id)}
+                    >
                       Overwrite
                     </button>
                     {confirmDelete === save.id ? (
-                      <button className="confirm-btn delete" onClick={() => handleDelete(save.id)}>
+                      <button
+                        className="confirm-btn delete"
+                        onClick={() => handleDelete(save.id)}
+                      >
                         Confirm?
                       </button>
                     ) : (
-                      <button className="action-btn delete" onClick={() => handleDelete(save.id)}>
+                      <button
+                        className="save-action-btn delete"
+                        onClick={() => handleDelete(save.id)}
+                      >
                         Delete
                       </button>
                     )}

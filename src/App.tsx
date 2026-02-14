@@ -14,6 +14,7 @@ import { GameTemplateDetail } from "./pages/GameTemplate/GameTemplateDetail";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useToolStates } from "./hooks/useToolStates";
 import { DICE_ORDER } from "./utils/dice";
+import "./shared.css";
 import "./App.css";
 import "./components/SaveLoad/SaveLoad.css";
 
@@ -29,7 +30,15 @@ const PAGE_TITLES: Record<string, string> = {
   "new-template": "New Game Template",
 };
 
-const VALID_PAGES = ["dice", "cards", "coin", "tiles", "settings", "new-custom-deck", "new-template"];
+const VALID_PAGES = [
+  "dice",
+  "cards",
+  "coin",
+  "tiles",
+  "settings",
+  "new-custom-deck",
+  "new-template",
+];
 
 // Pages where the FAB should be shown
 const FAB_PAGES = ["dice", "cards", "coin", "tiles"];
@@ -40,7 +49,11 @@ function getPageFromHash(): string {
   if (hash.startsWith("deck-") || hash.startsWith("edit-deck-")) {
     return hash;
   }
-  if (hash.startsWith("template-") || hash.startsWith("edit-template-") || hash.startsWith("run-template-")) {
+  if (
+    hash.startsWith("template-") ||
+    hash.startsWith("edit-template-") ||
+    hash.startsWith("run-template-")
+  ) {
     return hash;
   }
   if (VALID_PAGES.includes(hash)) {
@@ -168,14 +181,18 @@ function App() {
       return PAGE_TITLES[currentPage];
     }
     if (currentPage.startsWith("deck-")) {
-      const deck = toolStates.customDecks.find((d: any) => d.id === currentPage);
+      const deck = toolStates.customDecks.find(
+        (d: any) => d.id === currentPage,
+      );
       return deck?.name || "Custom Deck";
     }
     if (currentPage.startsWith("edit-deck-")) {
       return "Edit Deck";
     }
     if (currentPage.startsWith("template-")) {
-      const template = toolStates.gameTemplates.find((t: any) => t.id === currentPage);
+      const template = toolStates.gameTemplates.find(
+        (t: any) => t.id === currentPage,
+      );
       return template?.name || "Game Template";
     }
     if (currentPage.startsWith("edit-template-")) {
@@ -183,7 +200,9 @@ function App() {
     }
     if (currentPage.startsWith("run-template-")) {
       const templateId = currentPage.replace("run-", "");
-      const template = toolStates.gameTemplates.find((t: any) => t.id === templateId);
+      const template = toolStates.gameTemplates.find(
+        (t: any) => t.id === templateId,
+      );
       return template?.name || "Running Template";
     }
     return "Rolling Home";
@@ -193,7 +212,9 @@ function App() {
     // Game Template routes
     if (currentPage.startsWith("run-template-")) {
       const templateId = currentPage.replace("run-", "");
-      const template = toolStates.gameTemplates.find((t: any) => t.id === templateId);
+      const template = toolStates.gameTemplates.find(
+        (t: any) => t.id === templateId,
+      );
       if (template) {
         return (
           <GameTemplateRunner
@@ -208,7 +229,9 @@ function App() {
 
     if (currentPage.startsWith("edit-template-")) {
       const templateId = currentPage.replace("edit-template-", "");
-      const template = toolStates.gameTemplates.find((t: any) => t.id === templateId);
+      const template = toolStates.gameTemplates.find(
+        (t: any) => t.id === templateId,
+      );
       if (template) {
         return (
           <GameTemplateBuilder
@@ -230,7 +253,9 @@ function App() {
     }
 
     if (currentPage.startsWith("template-")) {
-      const template = toolStates.gameTemplates.find((t: any) => t.id === currentPage);
+      const template = toolStates.gameTemplates.find(
+        (t: any) => t.id === currentPage,
+      );
       if (template) {
         return (
           <GameTemplateDetail
@@ -265,13 +290,17 @@ function App() {
     }
 
     if (currentPage.startsWith("deck-")) {
-      const deck = toolStates.customDecks.find((d: any) => d.id === currentPage);
+      const deck = toolStates.customDecks.find(
+        (d: any) => d.id === currentPage,
+      );
       if (deck) {
         return (
           <CustomDeckPlay
             deck={deck}
             settings={settings}
-            onUpdate={(updates: any) => toolStates.updateCustomDeck(currentPage, updates)}
+            onUpdate={(updates: any) =>
+              toolStates.updateCustomDeck(currentPage, updates)
+            }
             onEdit={() => handleNavigate("edit-" + currentPage)}
           />
         );
@@ -352,8 +381,17 @@ function App() {
     }
   };
 
-  const showHeader = currentPage !== "settings" && !currentPage.startsWith("edit-deck-") && currentPage !== "new-custom-deck" && !currentPage.startsWith("edit-template-") && currentPage !== "new-template" && !currentPage.startsWith("run-template-");
-  const showFab = FAB_PAGES.includes(currentPage) || currentPage.startsWith("deck-") || currentPage.startsWith("template-");
+  const showHeader =
+    currentPage !== "settings" &&
+    !currentPage.startsWith("edit-deck-") &&
+    currentPage !== "new-custom-deck" &&
+    !currentPage.startsWith("edit-template-") &&
+    currentPage !== "new-template" &&
+    !currentPage.startsWith("run-template-");
+  const showFab =
+    FAB_PAGES.includes(currentPage) ||
+    currentPage.startsWith("deck-") ||
+    currentPage.startsWith("template-");
 
   return (
     <div className={"app" + (showInstallBanner ? " has-install-banner" : "")}>
@@ -371,7 +409,11 @@ function App() {
         onClose={() => setSaveModalOpen(false)}
         saves={toolStates.savedGames}
         onSave={(name: string | null, existingId?: string) => {
-          if (existingId) { (toolStates.saveGame as any)(null, existingId); } else if (name) { toolStates.saveGame(name); }
+          if (existingId) {
+            (toolStates.saveGame as any)(null, existingId);
+          } else if (name) {
+            toolStates.saveGame(name);
+          }
         }}
         onLoad={(saveId: string) => {
           toolStates.loadGame(saveId);
@@ -381,45 +423,47 @@ function App() {
         }}
       />
 
-      {showHeader && (
-        <header className="header">
+      <div className="app-content">
+        {showHeader && (
+          <header className="header">
+            <button
+              className="menu-btn"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Open menu"
+            >
+              ☰
+            </button>
+            <h1>{getPageTitle()}</h1>
+            <div className="header-spacer" style={{ width: 36 }}></div>
+          </header>
+        )}
+
+        <main className="main-content">{renderPage()}</main>
+
+        {showFab && (
           <button
-            className="menu-btn"
-            onClick={() => setMenuOpen(true)}
-            aria-label="Open menu"
+            className="save-fab"
+            onClick={() => setSaveModalOpen(true)}
+            aria-label="Save/Load game"
           >
-            ☰
+            💾
           </button>
-          <h1>{getPageTitle()}</h1>
-          <div style={{ width: 36 }}></div>
-        </header>
-      )}
+        )}
 
-      <main className="main-content">{renderPage()}</main>
-
-      {showFab && (
-        <button
-          className="save-fab"
-          onClick={() => setSaveModalOpen(true)}
-          aria-label="Save/Load game"
-        >
-          💾
-        </button>
-      )}
-
-      {showInstallBanner && (
-        <div className="install-banner">
-          <span>Install for quick access</span>
-          <div className="install-banner-buttons">
-            <button className="install-btn" onClick={handleInstall}>
-              Install
-            </button>
-            <button className="dismiss-btn" onClick={dismissBanner}>
-              ✕
-            </button>
+        {showInstallBanner && (
+          <div className="install-banner">
+            <span>Install for quick access</span>
+            <div className="install-banner-buttons">
+              <button className="install-btn" onClick={handleInstall}>
+                Install
+              </button>
+              <button className="dismiss-btn" onClick={dismissBanner}>
+                ✕
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

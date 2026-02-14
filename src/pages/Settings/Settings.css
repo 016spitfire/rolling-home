@@ -1,122 +1,95 @@
 .settings {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .settings-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .settings-header h1 {
-  margin: 0;
-  font-size: 1.4rem;
-}
-
-.back-btn {
-  padding: 6px 12px;
-  font-size: 0.95rem;
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  cursor: pointer;
-}
-
-.back-btn:active {
-  background: var(--btn-active);
+    margin: 0;
+    font-size: 1.4rem;
 }
 
 .settings-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.setting-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  background: var(--results-bg);
-  border-radius: 6px;
+.settings .setting-row {
+    padding: 12px;
+    background: var(--results-bg);
+    border-radius: 6px;
 }
 
-.setting-label {
-  font-weight: 500;
+.settings .setting-label {
+    font-weight: 500;
 }
 
 .setting-value {
-  padding: 6px 12px;
-  font-size: 0.95rem;
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  cursor: pointer;
+    padding: 6px 12px;
+    font-size: 0.95rem;
+    border: 1px solid var(--btn-border);
+    border-radius: 6px;
+    background: var(--btn-bg);
+    color: var(--text-color);
+    cursor: pointer;
 }
 
 .setting-value:active {
-  background: var(--btn-active);
+    background: var(--btn-active);
 }
 
-.toggle-btn {
-  padding: 6px 16px;
-  font-size: 0.95rem;
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  cursor: pointer;
+.settings .toggle-btn {
+    padding: 6px 16px;
+    font-size: 0.95rem;
+    border-radius: 6px;
 }
 
-.toggle-btn.toggle-on {
-  background: var(--roll-btn-bg);
-  color: white;
-  border-color: var(--roll-btn-bg);
-}
-
-.toggle-btn:active {
-  opacity: 0.9;
+.settings .toggle-btn:active {
+    opacity: 0.9;
 }
 
 .setting-section {
-  padding: 12px;
-  background: var(--results-bg);
-  border-radius: 6px;
+    padding: 12px;
+    background: var(--results-bg);
+    border-radius: 6px;
 }
 
 .setting-section-label {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 10px;
+    display: block;
+    font-weight: 500;
+    margin-bottom: 10px;
 }
 
 .dice-toggles {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
 .dice-toggle-btn {
-  padding: 6px 10px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  border: 1px solid var(--btn-border);
-  border-radius: 4px;
-  background: var(--btn-bg);
-  color: var(--muted-text);
-  cursor: pointer;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid var(--btn-border);
+    border-radius: 4px;
+    background: var(--btn-bg);
+    color: var(--muted-text);
+    cursor: pointer;
 }
 
 .dice-toggle-btn.dice-toggle-on {
-  background: var(--roll-btn-bg);
-  color: white;
-  border-color: var(--roll-btn-bg);
+    background: var(--roll-btn-bg);
+    color: white;
+    border-color: var(--roll-btn-bg);
 }
 
 .dice-toggle-btn:active {
-  opacity: 0.9;
+    opacity: 0.9;
 }

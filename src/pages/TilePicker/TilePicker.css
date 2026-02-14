@@ -1,234 +1,193 @@
 .tile-picker {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.bag-status {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.95rem;
-  color: var(--muted-text);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .drawn-tile-area {
-  display: flex;
-  justify-content: center;
-  padding: 20px 0;
-  min-height: 140px;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    min-height: 140px;
 }
 
 .tile-hand {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
 }
 
 .rummikub-tile {
-  width: 70px;
-  height: 100px;
-  background: #f5f0e1;
-  border-radius: 6px;
-  border: 2px solid #d4c5a9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    width: 70px;
+    height: 100px;
+    background: #f5f0e1;
+    border-radius: 6px;
+    border: 2px solid #d4c5a9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .tile-hand .rummikub-tile {
-  width: 60px;
-  height: 86px;
+    width: 60px;
+    height: 86px;
 }
 
 .tile-number {
-  font-size: 2.2rem;
-  font-weight: 700;
+    font-size: 2.2rem;
+    font-weight: 700;
 }
 
 .tile-hand .tile-number {
-  font-size: 1.8rem;
+    font-size: 1.8rem;
 }
 
 .tile-red .tile-number,
 .tile-red .history-tile-number {
-  color: #d32f2f;
+    color: #d32f2f;
 }
 
 .tile-blue .tile-number,
 .tile-blue .history-tile-number {
-  color: #1976d2;
+    color: #1976d2;
 }
 
 .tile-yellow .tile-number,
 .tile-yellow .history-tile-number {
-  color: #f9a825;
+    color: #f9a825;
 }
 
 .tile-black .tile-number,
 .tile-black .history-tile-number {
-  color: #212121;
+    color: #212121;
 }
 
 .tile-joker {
-  background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff);
+    background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff);
 }
 
 .tile-joker .tile-number,
 .tile-joker .history-tile-number {
-  color: #333;
-  text-shadow: 0 0 2px white;
+    color: #333;
+    text-shadow: 0 0 2px white;
 }
 
 .tile-placeholder {
-  color: var(--muted-text);
-  font-size: 0.85rem;
-  text-align: center;
-  padding: 8px;
-}
-
-.draw-count-selector {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.draw-label {
-  font-size: 0.95rem;
-  color: var(--text-color);
-}
-
-.draw-count {
-  width: 28px;
-  text-align: center;
-  font-size: 1.1rem;
-  font-weight: 500;
-}
-
-.die-btn {
-  width: 40px;
-  height: 40px;
-  font-size: 1.3rem;
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.die-btn:active {
-  background: var(--btn-active);
-}
-
-.die-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+    color: var(--muted-text);
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 8px;
 }
 
 .tile-actions {
-  display: flex;
-  gap: 8px;
+    display: flex;
+    gap: 8px;
 }
 
-.tile-actions .roll-btn {
-  flex: 1;
-}
-
-.secondary-actions {
-  margin-top: 8px;
-}
-
-.secondary-actions .clear-btn {
-  flex: 1;
-}
-
-.tile-options {
-  background: var(--results-bg);
-  border-radius: 6px;
-  padding: 12px;
-}
-
-.tile-options .setting-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.tile-options .setting-label {
-  font-size: 0.95rem;
-}
-
-.tile-options .toggle-btn {
-  padding: 6px 12px;
-  font-size: 0.9rem;
-  border: 1px solid var(--btn-border);
-  border-radius: 4px;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  cursor: pointer;
-}
-
-.tile-options .toggle-btn.toggle-on {
-  background: var(--roll-btn-bg);
-  color: white;
-  border-color: var(--roll-btn-bg);
+.tile-actions .action-btn {
+    flex: 1;
 }
 
 /* History styles */
 .tile-history {
-  background: var(--results-bg);
-  border-radius: 6px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+    background: var(--results-bg);
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .history-header {
-  font-size: 0.9rem;
-  color: var(--muted-text);
+    font-size: 0.9rem;
+    color: var(--muted-text);
 }
 
 .history-draws {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .history-draw-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--btn-border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--btn-border);
 }
 
 .history-draw-group:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
 }
 
 .history-tile {
-  width: 32px;
-  height: 44px;
-  background: #f5f0e1;
-  border-radius: 4px;
-  border: 1px solid #d4c5a9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 32px;
+    height: 44px;
+    background: #f5f0e1;
+    border-radius: 4px;
+    border: 1px solid #d4c5a9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .history-tile-number {
-  font-size: 1rem;
-  font-weight: 700;
+    font-size: 1rem;
+    font-weight: 700;
 }
 
 .tile-history .clear-btn {
-  margin-top: 4px;
+    margin-top: 4px;
+}
+
+.tile-display-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    order: 1;
+}
+
+.tile-display-panel .drawn-tile-area {
+    background: var(--results-bg);
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.tile-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    order: 2;
+}
+
+.tile-history {
+    order: 3;
+}
+
+@media (min-width: 768px) {
+    .tile-picker {
+        flex-direction: row;
+        align-items: stretch;
+    }
+
+    .tile-display-panel {
+        flex: 1;
+        order: 1;
+    }
+
+    .tile-controls {
+        flex: 1;
+        order: 2;
+    }
+
+    .tile-history {
+        flex: 1;
+        max-height: 80vh;
+        overflow-y: auto;
+        order: 3;
+    }
 }

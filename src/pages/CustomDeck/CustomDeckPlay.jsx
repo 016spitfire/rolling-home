@@ -12,7 +12,16 @@ function shuffleArray(array) {
 }
 
 export function CustomDeckPlay({ deck, settings, onUpdate, onEdit }) {
-  const { name, cardTypes, deck: drawPile, discard, hand, drawCount, reshuffleMode, history } = deck;
+  const {
+    name,
+    cardTypes,
+    deck: drawPile,
+    discard,
+    hand,
+    drawCount,
+    reshuffleMode,
+    history,
+  } = deck;
   const [editingCard, setEditingCard] = useState(null);
   const [editText, setEditText] = useState("");
 
@@ -45,7 +54,17 @@ export function CustomDeckPlay({ deck, settings, onUpdate, onEdit }) {
       discard: currentDiscard,
       history: [drawnCards, ...history].slice(0, 20),
     });
-  }, [drawPile, discard, hand, drawCount, reshuffleMode, history, settings.soundEnabled, settings.vibrateEnabled, onUpdate]);
+  }, [
+    drawPile,
+    discard,
+    hand,
+    drawCount,
+    reshuffleMode,
+    history,
+    settings.soundEnabled,
+    settings.vibrateEnabled,
+    onUpdate,
+  ]);
 
   const clearHand = () => {
     if (hand.length === 0) return;
@@ -115,22 +134,26 @@ export function CustomDeckPlay({ deck, settings, onUpdate, onEdit }) {
       // Update all cards with the same original text
       const originalText = editingCard.text;
       const updateCards = (cards) =>
-        cards.map((c) => (c.text === originalText ? { ...c, text: editText } : c));
-      
+        cards.map((c) =>
+          c.text === originalText ? { ...c, text: editText } : c,
+        );
+
       onUpdate({
         deck: updateCards(drawPile),
         discard: updateCards(discard),
         hand: updateCards(hand),
         history: history.map((h) => updateCards(h)),
         cardTypes: cardTypes.map((ct) =>
-          ct.id === editingCard.typeId ? { ...ct, text: editText } : ct
+          ct.id === editingCard.typeId ? { ...ct, text: editText } : ct,
         ),
       });
     } else {
       // Update just this one card
       const updateCards = (cards) =>
-        cards.map((c) => (c.id === editingCard.id ? { ...c, text: editText } : c));
-      
+        cards.map((c) =>
+          c.id === editingCard.id ? { ...c, text: editText } : c,
+        );
+
       onUpdate({
         deck: updateCards(drawPile),
         discard: updateCards(discard),
@@ -149,7 +172,7 @@ export function CustomDeckPlay({ deck, settings, onUpdate, onEdit }) {
 
   return (
     <div className="custom-deck-play">
-      <div className="deck-status">
+      <div className="tool-status">
         <span>Deck: {drawPile.length}</span>
         {!reshuffleMode && <span>Discard: {discard.length}</span>}
       </div>
@@ -174,29 +197,29 @@ export function CustomDeckPlay({ deck, settings, onUpdate, onEdit }) {
         )}
       </div>
 
-      <div className="draw-count-selector">
-        <span className="draw-label">Draw</span>
+      <div className="count-selector">
+        <span className="count-label">Draw</span>
         <button
-          className="die-btn"
+          className="inc-btn"
           onClick={() => updateDrawCount(-1)}
           disabled={drawCount <= 1}
         >
           −
         </button>
-        <span className="draw-count">{drawCount}</span>
+        <span className="count-value">{drawCount}</span>
         <button
-          className="die-btn"
+          className="inc-btn"
           onClick={() => updateDrawCount(1)}
           disabled={drawCount >= 10}
         >
           +
         </button>
-        <span className="draw-label">cards</span>
+        <span className="count-label">cards</span>
       </div>
 
       <div className="card-actions">
         <button
-          className="roll-btn"
+          className="action-btn"
           onClick={drawCards}
           disabled={drawPile.length === 0}
         >
@@ -209,7 +232,7 @@ export function CustomDeckPlay({ deck, settings, onUpdate, onEdit }) {
         )}
       </div>
 
-      <div className="card-options">
+      <div className="tool-options">
         <div className="setting-row">
           <span className="setting-label">Reshuffle after draw</span>
           <button
@@ -273,7 +296,7 @@ export function CustomDeckPlay({ deck, settings, onUpdate, onEdit }) {
               <button className="clear-btn" onClick={() => saveCardEdit(false)}>
                 Change This Card
               </button>
-              <button className="roll-btn" onClick={() => saveCardEdit(true)}>
+              <button className="action-btn" onClick={() => saveCardEdit(true)}>
                 Change All "{editingCard.text}"
               </button>
             </div>

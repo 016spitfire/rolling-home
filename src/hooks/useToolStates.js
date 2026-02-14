@@ -84,6 +84,7 @@ const defaultCardState = {
   hand: [],
   drawCount: 1,
   reshuffleMode: false,
+  history: [],
 };
 
 const defaultCoinState = {

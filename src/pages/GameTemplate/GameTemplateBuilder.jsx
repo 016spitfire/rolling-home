@@ -11,16 +11,26 @@ const ACTION_TYPES = [
 const DICE_OPTIONS = ["d4", "d6", "d8", "d10", "d12", "d20", "d100"];
 
 function generateId(prefix) {
-  return prefix + "-" + Date.now() + "-" + Math.random().toString(36).substr(2, 9);
+  return (
+    prefix + "-" + Date.now() + "-" + Math.random().toString(36).substr(2, 9)
+  );
 }
 
-export function GameTemplateBuilder({ existingTemplate = null, customDecks = [], onSave, onDelete = null, onCancel }) {
+export function GameTemplateBuilder({
+  existingTemplate = null,
+  customDecks = [],
+  onSave,
+  onDelete = null,
+  onCancel,
+}) {
   const [name, setName] = useState(existingTemplate?.name || "");
   const [setupVariables, setSetupVariables] = useState(
-    existingTemplate?.setupVariables || []
+    existingTemplate?.setupVariables || [],
   );
   const [phases, setPhases] = useState(
-    existingTemplate?.phases || [{ id: generateId("phase"), name: "Phase 1", steps: [] }]
+    existingTemplate?.phases || [
+      { id: generateId("phase"), name: "Phase 1", steps: [] },
+    ],
   );
   const [expandedPhase, setExpandedPhase] = useState(phases[0]?.id || null);
   const [editingStep, setEditingStep] = useState(null);
@@ -29,16 +39,24 @@ export function GameTemplateBuilder({ existingTemplate = null, customDecks = [],
   const addVariable = () => {
     setSetupVariables([
       ...setupVariables,
-      { id: generateId("var"), name: "", label: "", type: "number", default: 1 }
+      {
+        id: generateId("var"),
+        name: "",
+        label: "",
+        type: "number",
+        default: 1,
+      },
     ]);
   };
 
   const updateVariable = (id, updates) => {
-    setSetupVariables(setupVariables.map(v => v.id === id ? { ...v, ...updates } : v));
+    setSetupVariables(
+      setupVariables.map((v) => (v.id === id ? { ...v, ...updates } : v)),
+    );
   };
 
   const removeVariable = (id) => {
-    setSetupVariables(setupVariables.filter(v => v.id !== id));
+    setSetupVariables(setupVariables.filter((v) => v.id !== id));
   };
 
   // Phases
@@ -49,22 +67,29 @@ export function GameTemplateBuilder({ existingTemplate = null, customDecks = [],
   };
 
   const updatePhase = (id, updates) => {
-    setPhases(phases.map(p => p.id === id ? { ...p, ...updates } : p));
+    setPhases(phases.map((p) => (p.id === id ? { ...p, ...updates } : p)));
   };
 
   const removePhase = (id) => {
     if (phases.length <= 1) return;
-    setPhases(phases.filter(p => p.id !== id));
+    setPhases(phases.filter((p) => p.id !== id));
     if (expandedPhase === id) {
-      setExpandedPhase(phases.find(p => p.id !== id)?.id || null);
+      setExpandedPhase(phases.find((p) => p.id !== id)?.id || null);
     }
   };
 
   const movePhase = (id, direction) => {
-    const index = phases.findIndex(p => p.id === id);
-    if ((direction === -1 && index === 0) || (direction === 1 && index === phases.length - 1)) return;
+    const index = phases.findIndex((p) => p.id === id);
+    if (
+      (direction === -1 && index === 0) ||
+      (direction === 1 && index === phases.length - 1)
+    )
+      return;
     const newPhases = [...phases];
-    [newPhases[index], newPhases[index + direction]] = [newPhases[index + direction], newPhases[index]];
+    [newPhases[index], newPhases[index + direction]] = [
+      newPhases[index + direction],
+      newPhases[index],
+    ];
     setPhases(newPhases);
   };
 
@@ -74,46 +99,68 @@ export function GameTemplateBuilder({ existingTemplate = null, customDecks = [],
       id: generateId("step"),
       type,
       ...(type === "text" ? { text: "" } : {}),
-      ...(type === "auto-action" || type === "input-action" ? { 
-        actionType: "cards",
-        config: {},
-        ...(type === "input-action" ? { prompt: "" } : {})
-      } : {}),
+      ...(type === "auto-action" || type === "input-action"
+        ? {
+            actionType: "cards",
+            config: {},
+            ...(type === "input-action" ? { prompt: "" } : {}),
+          }
+        : {}),
     };
-    setPhases(phases.map(p => 
-      p.id === phaseId ? { ...p, steps: [...p.steps, newStep] } : p
-    ));
+    setPhases(
+      phases.map((p) =>
+        p.id === phaseId ? { ...p, steps: [...p.steps, newStep] } : p,
+      ),
+    );
     setEditingStep({ phaseId, step: newStep });
   };
 
   const updateStep = (phaseId, stepId, updates) => {
-    setPhases(phases.map(p => 
-      p.id === phaseId 
-        ? { ...p, steps: p.steps.map(s => s.id === stepId ? { ...s, ...updates } : s) }
-        : p
-    ));
+    setPhases(
+      phases.map((p) =>
+        p.id === phaseId
+          ? {
+              ...p,
+              steps: p.steps.map((s) =>
+                s.id === stepId ? { ...s, ...updates } : s,
+              ),
+            }
+          : p,
+      ),
+    );
   };
 
   const removeStep = (phaseId, stepId) => {
-    setPhases(phases.map(p => 
-      p.id === phaseId ? { ...p, steps: p.steps.filter(s => s.id !== stepId) } : p
-    ));
+    setPhases(
+      phases.map((p) =>
+        p.id === phaseId
+          ? { ...p, steps: p.steps.filter((s) => s.id !== stepId) }
+          : p,
+      ),
+    );
   };
 
   const moveStep = (phaseId, stepId, direction) => {
-    const phase = phases.find(p => p.id === phaseId);
+    const phase = phases.find((p) => p.id === phaseId);
     if (!phase) return;
-    const index = phase.steps.findIndex(s => s.id === stepId);
-    if ((direction === -1 && index === 0) || (direction === 1 && index === phase.steps.length - 1)) return;
+    const index = phase.steps.findIndex((s) => s.id === stepId);
+    if (
+      (direction === -1 && index === 0) ||
+      (direction === 1 && index === phase.steps.length - 1)
+    )
+      return;
     const newSteps = [...phase.steps];
-    [newSteps[index], newSteps[index + direction]] = [newSteps[index + direction], newSteps[index]];
+    [newSteps[index], newSteps[index + direction]] = [
+      newSteps[index + direction],
+      newSteps[index],
+    ];
     updatePhase(phaseId, { steps: newSteps });
   };
 
   const handleSave = () => {
     if (!name.trim()) return;
     if (phases.length === 0) return;
-    
+
     onSave({
       name: name.trim(),
       setupVariables,
@@ -150,36 +197,55 @@ export function GameTemplateBuilder({ existingTemplate = null, customDecks = [],
         <div className="builder-section">
           <div className="section-header">
             <label>Setup Variables</label>
-            <button className="add-btn-small" onClick={addVariable}>+ Add</button>
+            <button className="add-btn-small" onClick={addVariable}>
+              + Add
+            </button>
           </div>
           {setupVariables.length === 0 ? (
-            <p className="empty-hint">Variables let you use values like player count in your steps.</p>
+            <p className="empty-hint">
+              Variables let you use values like player count in your steps.
+            </p>
           ) : (
             <div className="variables-list">
-              {setupVariables.map(v => (
+              {setupVariables.map((v) => (
                 <div key={v.id} className="variable-row">
                   <input
                     type="text"
                     value={v.name}
-                    onChange={(e) => updateVariable(v.id, { name: e.target.value.replace(/\s/g, '') })}
+                    onChange={(e) =>
+                      updateVariable(v.id, {
+                        name: e.target.value.replace(/\s/g, ""),
+                      })
+                    }
                     placeholder="variableName"
                     className="var-name-input"
                   />
                   <input
                     type="text"
                     value={v.label}
-                    onChange={(e) => updateVariable(v.id, { label: e.target.value })}
+                    onChange={(e) =>
+                      updateVariable(v.id, { label: e.target.value })
+                    }
                     placeholder="Display Label"
                     className="var-label-input"
                   />
                   <input
                     type="number"
                     value={v.default}
-                    onChange={(e) => updateVariable(v.id, { default: parseInt(e.target.value) || 1 })}
+                    onChange={(e) =>
+                      updateVariable(v.id, {
+                        default: parseInt(e.target.value) || 1,
+                      })
+                    }
                     className="var-default-input"
                     min="1"
                   />
-                  <button className="remove-btn" onClick={() => removeVariable(v.id)}>✕</button>
+                  <button
+                    className="remove-btn"
+                    onClick={() => removeVariable(v.id)}
+                  >
+                    ✕
+                  </button>
                 </div>
               ))}
             </div>
@@ -190,67 +256,143 @@ export function GameTemplateBuilder({ existingTemplate = null, customDecks = [],
         <div className="builder-section">
           <div className="section-header">
             <label>Phases (will loop)</label>
-            <button className="add-btn-small" onClick={addPhase}>+ Add Phase</button>
+            <button className="add-btn-small" onClick={addPhase}>
+              + Add Phase
+            </button>
           </div>
           <div className="phases-list">
             {phases.map((phase, phaseIndex) => (
               <div key={phase.id} className="phase-card">
-                <div 
+                <div
                   className="phase-header"
-                  onClick={() => setExpandedPhase(expandedPhase === phase.id ? null : phase.id)}
+                  onClick={() =>
+                    setExpandedPhase(
+                      expandedPhase === phase.id ? null : phase.id,
+                    )
+                  }
                 >
                   <div className="phase-title-row">
                     <span className="phase-number">{phaseIndex + 1}.</span>
                     <input
                       type="text"
                       value={phase.name}
-                      onChange={(e) => { e.stopPropagation(); updatePhase(phase.id, { name: e.target.value }); }}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        updatePhase(phase.id, { name: e.target.value });
+                      }}
                       onClick={(e) => e.stopPropagation()}
                       className="phase-name-input"
                       placeholder="Phase name"
                     />
                   </div>
                   <div className="phase-actions">
-                    <button onClick={(e) => { e.stopPropagation(); movePhase(phase.id, -1); }} disabled={phaseIndex === 0}>↑</button>
-                    <button onClick={(e) => { e.stopPropagation(); movePhase(phase.id, 1); }} disabled={phaseIndex === phases.length - 1}>↓</button>
-                    <button onClick={(e) => { e.stopPropagation(); removePhase(phase.id); }} disabled={phases.length <= 1}>✕</button>
-                    <span className="expand-icon">{expandedPhase === phase.id ? "▼" : "▶"}</span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        movePhase(phase.id, -1);
+                      }}
+                      disabled={phaseIndex === 0}
+                    >
+                      ↑
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        movePhase(phase.id, 1);
+                      }}
+                      disabled={phaseIndex === phases.length - 1}
+                    >
+                      ↓
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removePhase(phase.id);
+                      }}
+                      disabled={phases.length <= 1}
+                    >
+                      ✕
+                    </button>
+                    <span className="expand-icon">
+                      {expandedPhase === phase.id ? "▼" : "▶"}
+                    </span>
                   </div>
                 </div>
-                
+
                 {expandedPhase === phase.id && (
                   <div className="phase-content">
                     {phase.steps.length === 0 ? (
-                      <p className="empty-hint">No steps yet. Add a step below.</p>
+                      <p className="empty-hint">
+                        No steps yet. Add a step below.
+                      </p>
                     ) : (
                       <div className="steps-list">
                         {phase.steps.map((step, stepIndex) => (
                           <div key={step.id} className="step-row">
-                            <span className="step-number">{stepIndex + 1}.</span>
-                            <div className="step-summary" onClick={() => setEditingStep({ phaseId: phase.id, step })}>
+                            <span className="step-number">
+                              {stepIndex + 1}.
+                            </span>
+                            <div
+                              className="step-summary"
+                              onClick={() =>
+                                setEditingStep({ phaseId: phase.id, step })
+                              }
+                            >
                               {step.type === "text" && (
-                                <span className="step-text">✎ {step.text || "(empty text)"}</span>
+                                <span className="step-text">
+                                  ✎ {step.text || "(empty text)"}
+                                </span>
                               )}
                               {step.type === "auto-action" && (
-                                <span className="step-action">⚡ Auto: {ACTION_TYPES.find(a => a.id === step.actionType)?.label || step.actionType}</span>
+                                <span className="step-action">
+                                  ⚡ Auto:{" "}
+                                  {ACTION_TYPES.find(
+                                    (a) => a.id === step.actionType,
+                                  )?.label || step.actionType}
+                                </span>
                               )}
                               {step.type === "input-action" && (
-                                <span className="step-action">✋ Input: {ACTION_TYPES.find(a => a.id === step.actionType)?.label || step.actionType}</span>
+                                <span className="step-action">
+                                  ✋ Input:{" "}
+                                  {ACTION_TYPES.find(
+                                    (a) => a.id === step.actionType,
+                                  )?.label || step.actionType}
+                                </span>
                               )}
                             </div>
                             <div className="step-actions">
-                              <button onClick={() => moveStep(phase.id, step.id, -1)} disabled={stepIndex === 0}>↑</button>
-                              <button onClick={() => moveStep(phase.id, step.id, 1)} disabled={stepIndex === phase.steps.length - 1}>↓</button>
-                              <button onClick={() => removeStep(phase.id, step.id)}>✕</button>
+                              <button
+                                onClick={() => moveStep(phase.id, step.id, -1)}
+                                disabled={stepIndex === 0}
+                              >
+                                ↑
+                              </button>
+                              <button
+                                onClick={() => moveStep(phase.id, step.id, 1)}
+                                disabled={stepIndex === phase.steps.length - 1}
+                              >
+                                ↓
+                              </button>
+                              <button
+                                onClick={() => removeStep(phase.id, step.id)}
+                              >
+                                ✕
+                              </button>
                             </div>
                           </div>
                         ))}
                       </div>
                     )}
                     <div className="add-step-buttons">
-                      <button onClick={() => addStep(phase.id, "text")}>+ Text</button>
-                      <button onClick={() => addStep(phase.id, "auto-action")}>+ Auto Action</button>
-                      <button onClick={() => addStep(phase.id, "input-action")}>+ Input Action</button>
+                      <button onClick={() => addStep(phase.id, "text")}>
+                        + Text
+                      </button>
+                      <button onClick={() => addStep(phase.id, "auto-action")}>
+                        + Auto Action
+                      </button>
+                      <button onClick={() => addStep(phase.id, "input-action")}>
+                        + Input Action
+                      </button>
                     </div>
                   </div>
                 )}
@@ -261,7 +403,7 @@ export function GameTemplateBuilder({ existingTemplate = null, customDecks = [],
       </div>
 
       <div className="builder-actions">
-        <button className="roll-btn" onClick={handleSave} disabled={!isValid}>
+        <button className="action-btn" onClick={handleSave} disabled={!isValid}>
           {existingTemplate ? "Save Changes" : "Create Template"}
         </button>
         {existingTemplate && onDelete && (
@@ -289,22 +431,32 @@ export function GameTemplateBuilder({ existingTemplate = null, customDecks = [],
   );
 }
 
-function StepEditorModal({ step, phaseId, setupVariables, customDecks, onSave, onCancel }) {
+function StepEditorModal({
+  step,
+  phaseId,
+  setupVariables,
+  customDecks,
+  onSave,
+  onCancel,
+}) {
   const [localStep, setLocalStep] = useState({ ...step });
 
   const updateLocal = (updates) => {
-    setLocalStep(prev => ({ ...prev, ...updates }));
+    setLocalStep((prev) => ({ ...prev, ...updates }));
   };
 
   const updateConfig = (updates) => {
-    setLocalStep(prev => ({ ...prev, config: { ...prev.config, ...updates } }));
+    setLocalStep((prev) => ({
+      ...prev,
+      config: { ...prev.config, ...updates },
+    }));
   };
 
   return (
     <div className="modal-backdrop" onClick={onCancel}>
       <div className="step-editor-modal" onClick={(e) => e.stopPropagation()}>
         <h3>Edit Step</h3>
-        
+
         {localStep.type === "text" && (
           <div className="editor-field">
             <label>Instruction Text</label>
@@ -317,7 +469,8 @@ function StepEditorModal({ step, phaseId, setupVariables, customDecks, onSave, o
           </div>
         )}
 
-        {(localStep.type === "auto-action" || localStep.type === "input-action") && (
+        {(localStep.type === "auto-action" ||
+          localStep.type === "input-action") && (
           <>
             {localStep.type === "input-action" && (
               <div className="editor-field">
@@ -334,11 +487,16 @@ function StepEditorModal({ step, phaseId, setupVariables, customDecks, onSave, o
             <div className="editor-field">
               <label>Action Type</label>
               <div className="action-type-buttons">
-                {ACTION_TYPES.map(action => (
+                {ACTION_TYPES.map((action) => (
                   <button
                     key={action.id}
-                    className={"action-type-btn " + (localStep.actionType === action.id ? "active" : "")}
-                    onClick={() => updateLocal({ actionType: action.id, config: {} })}
+                    className={
+                      "action-type-btn " +
+                      (localStep.actionType === action.id ? "active" : "")
+                    }
+                    onClick={() =>
+                      updateLocal({ actionType: action.id, config: {} })
+                    }
                   >
                     {action.icon} {action.label}
                   </button>
@@ -353,21 +511,30 @@ function StepEditorModal({ step, phaseId, setupVariables, customDecks, onSave, o
                   <label>Deck Source</label>
                   <select
                     value={localStep.config.deckSource || "standard"}
-                    onChange={(e) => updateConfig({ deckSource: e.target.value })}
+                    onChange={(e) =>
+                      updateConfig({ deckSource: e.target.value })
+                    }
                   >
                     <option value="standard">Standard Deck</option>
-                    {customDecks.map(deck => (
-                      <option key={deck.id} value={deck.id}>{deck.name}</option>
+                    {customDecks.map((deck) => (
+                      <option key={deck.id} value={deck.id}>
+                        {deck.name}
+                      </option>
                     ))}
                   </select>
                 </div>
                 {localStep.type === "auto-action" && (
                   <div className="editor-field">
-                    <label>Draw Count (use variable name like playersCount or a number)</label>
+                    <label>
+                      Draw Count (use variable name like playersCount or a
+                      number)
+                    </label>
                     <input
                       type="text"
                       value={localStep.config.drawCount || ""}
-                      onChange={(e) => updateConfig({ drawCount: e.target.value })}
+                      onChange={(e) =>
+                        updateConfig({ drawCount: e.target.value })
+                      }
                       placeholder="e.g., 4 or playersCount"
                     />
                   </div>
@@ -376,60 +543,73 @@ function StepEditorModal({ step, phaseId, setupVariables, customDecks, onSave, o
             )}
 
             {/* Tiles Config */}
-            {localStep.actionType === "tiles" && localStep.type === "auto-action" && (
-              <div className="action-config">
-                <div className="editor-field">
-                  <label>Draw Count (use variable name or number)</label>
-                  <input
-                    type="text"
-                    value={localStep.config.drawCount || ""}
-                    onChange={(e) => updateConfig({ drawCount: e.target.value })}
-                    placeholder="e.g., 4 or playersCount * 2"
-                  />
+            {localStep.actionType === "tiles" &&
+              localStep.type === "auto-action" && (
+                <div className="action-config">
+                  <div className="editor-field">
+                    <label>Draw Count (use variable name or number)</label>
+                    <input
+                      type="text"
+                      value={localStep.config.drawCount || ""}
+                      onChange={(e) =>
+                        updateConfig({ drawCount: e.target.value })
+                      }
+                      placeholder="e.g., 4 or playersCount * 2"
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {/* Coins Config */}
-            {localStep.actionType === "coins" && localStep.type === "auto-action" && (
-              <div className="action-config">
-                <div className="editor-field">
-                  <label>Flip Count (use variable name or number)</label>
-                  <input
-                    type="text"
-                    value={localStep.config.flipCount || ""}
-                    onChange={(e) => updateConfig({ flipCount: e.target.value })}
-                    placeholder="e.g., 3 or playersCount"
-                  />
+            {localStep.actionType === "coins" &&
+              localStep.type === "auto-action" && (
+                <div className="action-config">
+                  <div className="editor-field">
+                    <label>Flip Count (use variable name or number)</label>
+                    <input
+                      type="text"
+                      value={localStep.config.flipCount || ""}
+                      onChange={(e) =>
+                        updateConfig({ flipCount: e.target.value })
+                      }
+                      placeholder="e.g., 3 or playersCount"
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {/* Dice Config */}
-            {localStep.actionType === "dice" && localStep.type === "auto-action" && (
-              <div className="action-config">
-                <div className="editor-field">
-                  <label>Dice to Roll</label>
-                  {DICE_OPTIONS.map(die => (
-                    <div key={die} className="dice-config-row">
-                      <span>{die}</span>
-                      <input
-                        type="text"
-                        value={localStep.config[die] || ""}
-                        onChange={(e) => updateConfig({ [die]: e.target.value })}
-                        placeholder="0 or variable"
-                      />
-                    </div>
-                  ))}
+            {localStep.actionType === "dice" &&
+              localStep.type === "auto-action" && (
+                <div className="action-config">
+                  <div className="editor-field">
+                    <label>Dice to Roll</label>
+                    {DICE_OPTIONS.map((die) => (
+                      <div key={die} className="dice-config-row">
+                        <span>{die}</span>
+                        <input
+                          type="text"
+                          value={localStep.config[die] || ""}
+                          onChange={(e) =>
+                            updateConfig({ [die]: e.target.value })
+                          }
+                          placeholder="0 or variable"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </>
         )}
 
         <div className="modal-actions">
-          <button className="clear-btn" onClick={onCancel}>Cancel</button>
-          <button className="roll-btn" onClick={() => onSave(localStep)}>Save Step</button>
+          <button className="clear-btn" onClick={onCancel}>
+            Cancel
+          </button>
+          <button className="action-btn" onClick={() => onSave(localStep)}>
+            Save Step
+          </button>
         </div>
       </div>
     </div>

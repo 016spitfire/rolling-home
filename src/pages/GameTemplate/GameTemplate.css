@@ -1,937 +1,914 @@
 /* Game Template Builder */
 .game-template-builder {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .builder-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
 }
 
 .builder-header h1 {
-  margin: 0;
-  font-size: 1.2rem;
+    margin: 0;
+    font-size: 1.2rem;
 }
 
 .builder-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding-bottom: 100px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 100px;
 }
 
 .builder-section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .builder-section > label {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--muted-text);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted-text);
 }
 
 .section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .section-header label {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--muted-text);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted-text);
 }
 
 .add-btn-small {
-  padding: 6px 12px;
-  font-size: 0.85rem;
-  background: transparent;
-  color: var(--roll-btn-bg);
-  border: 1px dashed var(--roll-btn-bg);
-  border-radius: 4px;
-  cursor: pointer;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    background: transparent;
+    color: var(--roll-btn-bg);
+    border: 1px dashed var(--roll-btn-bg);
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .template-name-input {
-  width: 100%;
-  padding: 12px;
-  font-size: 1rem;
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  box-sizing: border-box;
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 1px solid var(--btn-border);
+    border-radius: 6px;
+    background: var(--btn-bg);
+    color: var(--text-color);
+    box-sizing: border-box;
 }
 
 .empty-hint {
-  font-size: 0.9rem;
-  color: var(--muted-text);
-  font-style: italic;
-  margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted-text);
+    font-style: italic;
+    margin: 0;
 }
 
 .variables-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .variable-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  padding: 10px;
-  background: var(--results-bg);
-  border-radius: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    padding: 10px;
+    background: var(--results-bg);
+    border-radius: 6px;
 }
 
 .var-name-input {
-  flex: 1 1 120px;
-  min-width: 100px;
-  padding: 8px;
-  font-size: 0.9rem;
-  border: 1px solid var(--btn-border);
-  border-radius: 4px;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  font-family: monospace;
-  box-sizing: border-box;
+    flex: 1 1 120px;
+    min-width: 100px;
+    padding: 8px;
+    font-size: 0.9rem;
+    border: 1px solid var(--btn-border);
+    border-radius: 4px;
+    background: var(--btn-bg);
+    color: var(--text-color);
+    font-family: monospace;
+    box-sizing: border-box;
 }
 
 .var-label-input {
-  flex: 2 1 150px;
-  min-width: 120px;
-  padding: 8px;
-  font-size: 0.9rem;
-  border: 1px solid var(--btn-border);
-  border-radius: 4px;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  box-sizing: border-box;
+    flex: 2 1 150px;
+    min-width: 120px;
+    padding: 8px;
+    font-size: 0.9rem;
+    border: 1px solid var(--btn-border);
+    border-radius: 4px;
+    background: var(--btn-bg);
+    color: var(--text-color);
+    box-sizing: border-box;
 }
 
 .var-default-input {
-  width: 60px;
-  flex-shrink: 0;
-  padding: 8px;
-  font-size: 0.9rem;
-  border: 1px solid var(--btn-border);
-  border-radius: 4px;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  text-align: center;
-  box-sizing: border-box;
+    width: 60px;
+    flex-shrink: 0;
+    padding: 8px;
+    font-size: 0.9rem;
+    border: 1px solid var(--btn-border);
+    border-radius: 4px;
+    background: var(--btn-bg);
+    color: var(--text-color);
+    text-align: center;
+    box-sizing: border-box;
 }
 
 .variable-row .remove-btn {
-  flex-shrink: 0;
+    flex-shrink: 0;
 }
 
 .phases-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .phase-card {
-  background: var(--results-bg);
-  border: 1px solid var(--btn-border);
-  border-radius: 8px;
-  overflow: hidden;
+    background: var(--results-bg);
+    border: 1px solid var(--btn-border);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .phase-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  cursor: pointer;
-  background: var(--btn-bg);
-  gap: 8px;
-  overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    cursor: pointer;
+    background: var(--btn-bg);
+    gap: 8px;
+    overflow: hidden;
 }
 
 .phase-title-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .phase-number {
-  font-weight: 600;
-  color: var(--roll-btn-bg);
-  flex-shrink: 0;
+    font-weight: 600;
+    color: var(--roll-btn-bg);
+    flex-shrink: 0;
 }
 
 .phase-name-input {
-  flex: 1;
-  min-width: 60px;
-  padding: 6px 8px;
-  font-size: 0.95rem;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--text-color);
-  box-sizing: border-box;
+    flex: 1;
+    min-width: 60px;
+    padding: 6px 8px;
+    font-size: 0.95rem;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-color);
+    box-sizing: border-box;
 }
 
 .phase-name-input:focus {
-  border-color: var(--btn-border);
-  background: var(--bg-color);
-  outline: none;
+    border-color: var(--btn-border);
+    background: var(--bg-color);
+    outline: none;
 }
 
 .phase-actions {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  flex-shrink: 0;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    flex-shrink: 0;
 }
 
 .phase-actions button {
-  width: 28px;
-  height: 28px;
-  border: 1px solid var(--btn-border);
-  border-radius: 4px;
-  background: var(--bg-color);
-  color: var(--text-color);
-  cursor: pointer;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--btn-border);
+    border-radius: 4px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .phase-actions button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
+    opacity: 0.3;
+    cursor: not-allowed;
 }
 
 .expand-icon {
-  color: var(--muted-text);
-  font-size: 0.8rem;
-  margin-left: 4px;
-  flex-shrink: 0;
+    color: var(--muted-text);
+    font-size: 0.8rem;
+    margin-left: 4px;
+    flex-shrink: 0;
 }
 
 .phase-content {
-  padding: 12px;
-  border-top: 1px solid var(--btn-border);
+    padding: 12px;
+    border-top: 1px solid var(--btn-border);
 }
 
 .steps-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
 }
 
 .step-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  background: var(--bg-color);
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: var(--bg-color);
+    border: 1px solid var(--btn-border);
+    border-radius: 6px;
 }
 
 .step-number {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--muted-text);
-  min-width: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--muted-text);
+    min-width: 20px;
 }
 
 .step-summary {
-  flex: 1;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
+    flex: 1;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
 }
 
 .step-text {
-  font-size: 0.9rem;
-  color: var(--text-color);
+    font-size: 0.9rem;
+    color: var(--text-color);
 }
 
 .step-action {
-  font-size: 0.9rem;
-  color: var(--roll-btn-bg);
+    font-size: 0.9rem;
+    color: var(--roll-btn-bg);
 }
 
 .step-actions {
-  display: flex;
-  gap: 4px;
+    display: flex;
+    gap: 4px;
 }
 
 .step-actions button {
-  width: 26px;
-  height: 26px;
-  border: 1px solid var(--btn-border);
-  border-radius: 4px;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  cursor: pointer;
-  font-size: 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 26px;
+    height: 26px;
+    border: 1px solid var(--btn-border);
+    border-radius: 4px;
+    background: var(--btn-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .step-actions button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
+    opacity: 0.3;
+    cursor: not-allowed;
 }
 
 .add-step-buttons {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .add-step-buttons button {
-  padding: 8px 12px;
-  font-size: 0.85rem;
-  background: transparent;
-  color: var(--roll-btn-bg);
-  border: 1px dashed var(--roll-btn-bg);
-  border-radius: 4px;
-  cursor: pointer;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    background: transparent;
+    color: var(--roll-btn-bg);
+    border: 1px dashed var(--roll-btn-bg);
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .builder-actions {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 16px;
-  background: var(--bg-color);
-  border-top: 1px solid var(--btn-border);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    background: var(--bg-color);
+    border-top: 1px solid var(--btn-border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .step-editor-modal {
-  background: var(--bg-color);
-  border-radius: 12px;
-  padding: 20px;
-  width: 100%;
-  max-width: 400px;
-  max-height: 80vh;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+    background: var(--bg-color);
+    border-radius: 12px;
+    padding: 20px;
+    width: 100%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .step-editor-modal h3 {
-  margin: 0;
-  font-size: 1.1rem;
+    margin: 0;
+    font-size: 1.1rem;
 }
 
 .editor-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .editor-field label {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--muted-text);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--muted-text);
 }
 
 .editor-field textarea,
 .editor-field input[type="text"],
 .editor-field input[type="number"],
 .editor-field select {
-  padding: 10px;
-  font-size: 0.95rem;
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  font-family: inherit;
+    padding: 10px;
+    font-size: 0.95rem;
+    border: 1px solid var(--btn-border);
+    border-radius: 6px;
+    background: var(--btn-bg);
+    color: var(--text-color);
+    font-family: inherit;
 }
 
 .editor-field textarea {
-  resize: vertical;
-  min-height: 80px;
+    resize: vertical;
+    min-height: 80px;
 }
 
 .action-type-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
 }
 
 .action-type-btn {
-  padding: 10px;
-  font-size: 0.9rem;
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+    padding: 10px;
+    font-size: 0.9rem;
+    border: 1px solid var(--btn-border);
+    border-radius: 6px;
+    background: var(--btn-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 }
 
 .action-type-btn.active {
-  background: var(--roll-btn-bg);
-  color: white;
-  border-color: var(--roll-btn-bg);
+    background: var(--roll-btn-bg);
+    color: white;
+    border-color: var(--roll-btn-bg);
 }
 
 .action-config {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 12px;
-  background: var(--results-bg);
-  border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    background: var(--results-bg);
+    border-radius: 6px;
 }
 
 .dice-config-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .dice-config-row span {
-  width: 50px;
-  font-weight: 500;
+    width: 50px;
+    font-weight: 500;
 }
 
 .dice-config-row input {
-  flex: 1;
+    flex: 1;
 }
 
 /* Game Template Runner */
 .game-template-runner {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .runner-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
 }
 
 .runner-header h1 {
-  margin: 0;
-  font-size: 1.2rem;
+    margin: 0;
+    font-size: 1.2rem;
 }
 
 .cycle-count {
-  font-size: 0.85rem;
-  color: var(--muted-text);
-  padding: 4px 10px;
-  background: var(--results-bg);
-  border-radius: 12px;
+    font-size: 0.85rem;
+    color: var(--muted-text);
+    padding: 4px 10px;
+    background: var(--results-bg);
+    border-radius: 12px;
 }
 
 .setup-screen {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
 }
 
 .setup-screen h2 {
-  margin: 0;
-  font-size: 1.1rem;
-  text-align: center;
+    margin: 0;
+    font-size: 1.1rem;
+    text-align: center;
 }
 
 .setup-hint {
-  text-align: center;
-  color: var(--muted-text);
-  margin: 0;
+    text-align: center;
+    color: var(--muted-text);
+    margin: 0;
 }
 
 .setup-variables {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .setup-var-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  background: var(--results-bg);
-  border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: var(--results-bg);
+    border-radius: 6px;
 }
 
 .setup-var-row label {
-  font-size: 0.95rem;
+    font-size: 0.95rem;
 }
 
 .setup-var-row input {
-  width: 80px;
-  padding: 8px;
-  font-size: 1rem;
-  text-align: center;
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
-  background: var(--btn-bg);
-  color: var(--text-color);
+    width: 80px;
+    padding: 8px;
+    font-size: 1rem;
+    text-align: center;
+    border: 1px solid var(--btn-border);
+    border-radius: 6px;
+    background: var(--btn-bg);
+    color: var(--text-color);
 }
 
 .start-btn {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 .runner-content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
 }
 
 .phase-indicator {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
 }
 
 .phase-dot {
-  padding: 6px 12px;
-  font-size: 0.8rem;
-  background: var(--btn-bg);
-  border: 1px solid var(--btn-border);
-  border-radius: 16px;
-  color: var(--muted-text);
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    background: var(--btn-bg);
+    border: 1px solid var(--btn-border);
+    border-radius: 16px;
+    color: var(--muted-text);
 }
 
 .phase-dot.active {
-  background: var(--roll-btn-bg);
-  color: white;
-  border-color: var(--roll-btn-bg);
+    background: var(--roll-btn-bg);
+    color: white;
+    border-color: var(--roll-btn-bg);
 }
 
 .phase-dot.done {
-  background: var(--results-bg);
-  color: var(--text-color);
+    background: var(--results-bg);
+    color: var(--text-color);
 }
 
 .current-phase {
-  text-align: center;
-  padding: 16px;
-  background: var(--results-bg);
-  border-radius: 8px;
+    text-align: center;
+    padding: 16px;
+    background: var(--results-bg);
+    border-radius: 8px;
 }
 
 .current-phase h2 {
-  margin: 0 0 4px 0;
-  font-size: 1.2rem;
+    margin: 0 0 4px 0;
+    font-size: 1.2rem;
 }
 
 .step-counter {
-  font-size: 0.85rem;
-  color: var(--muted-text);
+    font-size: 0.85rem;
+    color: var(--muted-text);
 }
 
 .current-step {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 20px;
-  background: var(--btn-bg);
-  border: 1px solid var(--btn-border);
-  border-radius: 8px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    background: var(--btn-bg);
+    border: 1px solid var(--btn-border);
+    border-radius: 8px;
 }
 
 .step-text-display {
-  text-align: center;
+    text-align: center;
 }
 
 .step-text-display p {
-  font-size: 1.1rem;
-  line-height: 1.5;
-  margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin: 0;
 }
 
 .step-auto-action,
 .step-input-action {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
 }
 
 .action-description,
 .action-prompt {
-  font-size: 1rem;
-  color: var(--text-color);
-  margin: 0;
-  text-align: center;
+    font-size: 1rem;
+    color: var(--text-color);
+    margin: 0;
+    text-align: center;
 }
 
 .input-action-input {
-  width: 100px;
-  padding: 12px;
-  font-size: 1.2rem;
-  text-align: center;
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
-  background: var(--bg-color);
-  color: var(--text-color);
+    width: 100px;
+    padding: 12px;
+    font-size: 1.2rem;
+    text-align: center;
+    border: 1px solid var(--btn-border);
+    border-radius: 6px;
+    background: var(--bg-color);
+    color: var(--text-color);
 }
 
 .step-result {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
 }
 
 /* Result displays */
 .result-cards,
 .result-tiles,
 .result-coins {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
 }
 
 .mini-card {
-  width: 45px;
-  height: 60px;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.85rem;
-  font-weight: 600;
+    width: 45px;
+    height: 60px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
 }
 
 .mini-card.card-red {
-  color: #d32f2f;
+    color: #d32f2f;
 }
 
 .mini-card.card-black {
-  color: #333;
+    color: #333;
 }
 
 .result-custom-cards {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
 }
 
 .deck-name {
-  font-size: 0.85rem;
-  color: var(--muted-text);
-  margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted-text);
+    margin: 0;
 }
 
 .custom-cards-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
 }
 
 .mini-custom-card {
-  padding: 8px 12px;
-  background: var(--bg-color);
-  border: 1px solid var(--btn-border);
-  border-radius: 4px;
-  font-size: 0.9rem;
+    padding: 8px 12px;
+    background: var(--bg-color);
+    border: 1px solid var(--btn-border);
+    border-radius: 4px;
+    font-size: 0.9rem;
 }
 
 .mini-tile {
-  width: 36px;
-  height: 48px;
-  background: white;
-  border: 2px solid #333;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: 700;
+    width: 36px;
+    height: 48px;
+    background: white;
+    border: 2px solid #333;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
 }
 
-.mini-tile.tile-red { color: #d32f2f; border-color: #d32f2f; }
-.mini-tile.tile-blue { color: #1976d2; border-color: #1976d2; }
-.mini-tile.tile-yellow { color: #f9a825; border-color: #f9a825; }
-.mini-tile.tile-black { color: #333; border-color: #333; }
+.mini-tile.tile-red {
+    color: #d32f2f;
+    border-color: #d32f2f;
+}
+.mini-tile.tile-blue {
+    color: #1976d2;
+    border-color: #1976d2;
+}
+.mini-tile.tile-yellow {
+    color: #f9a825;
+    border-color: #f9a825;
+}
+.mini-tile.tile-black {
+    color: #333;
+    border-color: #333;
+}
 .mini-tile.tile-joker {
-  background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
-  color: white;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-  border-color: #666;
+    background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    border-color: #666;
 }
 
 .mini-coin {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: 700;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
 }
 
 .mini-coin.heads {
-  background: linear-gradient(135deg, #ffd700, #ffec8b);
-  color: #8b6914;
-  border: 2px solid #daa520;
+    background: linear-gradient(135deg, #ffd700, #ffec8b);
+    color: #8b6914;
+    border: 2px solid #daa520;
 }
 
 .mini-coin.tails {
-  background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
-  color: #555;
-  border: 2px solid #999;
+    background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+    color: #555;
+    border: 2px solid #999;
 }
 
 .coin-summary {
-  font-size: 0.9rem;
-  color: var(--muted-text);
-  margin: 0;
+    font-size: 0.9rem;
+    color: var(--muted-text);
+    margin: 0;
 }
 
 .result-dice {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
 }
 
 .dice-result-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  background: var(--bg-color);
-  border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: var(--bg-color);
+    border-radius: 4px;
 }
 
 .die-name {
-  font-weight: 600;
-  min-width: 50px;
+    font-weight: 600;
+    min-width: 50px;
 }
 
 .die-rolls {
-  flex: 1;
-  color: var(--text-color);
+    flex: 1;
+    color: var(--text-color);
 }
 
 .die-total {
-  font-weight: 500;
-  color: var(--roll-btn-bg);
+    font-weight: 500;
+    color: var(--roll-btn-bg);
 }
 
 .dice-grand-total {
-  text-align: center;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--roll-btn-bg);
-  margin: 8px 0 0;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--roll-btn-bg);
+    margin: 8px 0 0;
 }
 
 .runner-nav {
-  display: flex;
-  gap: 12px;
-  padding-top: 16px;
-  border-top: 1px solid var(--btn-border);
+    display: flex;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--btn-border);
 }
 
 .runner-nav button {
-  flex: 1;
+    flex: 1;
 }
 
 /* Game Template List */
 .game-template-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .template-card {
-  padding: 16px;
-  background: var(--results-bg);
-  border: 1px solid var(--btn-border);
-  border-radius: 8px;
-  cursor: pointer;
+    padding: 16px;
+    background: var(--results-bg);
+    border: 1px solid var(--btn-border);
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 .template-card h3 {
-  margin: 0 0 8px 0;
-  font-size: 1rem;
+    margin: 0 0 8px 0;
+    font-size: 1rem;
 }
 
 .template-card p {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--muted-text);
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted-text);
 }
 
 .template-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
 }
 
 .template-actions button {
-  flex: 1;
-  padding: 8px;
-  font-size: 0.9rem;
-  border-radius: 4px;
-  cursor: pointer;
+    flex: 1;
+    padding: 8px;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .no-templates {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--muted-text);
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted-text);
 }
 
 .no-templates p {
-  margin: 0 0 16px 0;
-}
-
-/* Shared buttons */
-.back-btn {
-  padding: 8px 12px;
-  font-size: 0.95rem;
-  background: var(--btn-bg);
-  color: var(--text-color);
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.remove-btn {
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--btn-border);
-  border-radius: 6px;
-  background: var(--btn-bg);
-  color: var(--muted-text);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.delete-btn {
-  padding: 12px;
-  font-size: 1rem;
-  background: #d32f2f;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+    margin: 0 0 16px 0;
 }
 
 .modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-  padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 20px;
 }
 
 .modal-actions {
-  display: flex;
-  gap: 8px;
+    display: flex;
+    gap: 8px;
 }
 
 .modal-actions button {
-  flex: 1;
+    flex: 1;
 }
-
 
 /* Game Template Detail */
 .game-template-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .template-info h2 {
-  margin: 0 0 8px 0;
-  font-size: 1.3rem;
+    margin: 0 0 8px 0;
+    font-size: 1.3rem;
 }
 
 .template-meta {
-  color: var(--muted-text);
-  font-size: 0.9rem;
-  margin: 0 0 16px 0;
+    color: var(--muted-text);
+    font-size: 0.9rem;
+    margin: 0 0 16px 0;
 }
 
 .template-variables,
 .template-phases-preview {
-  margin-top: 16px;
+    margin-top: 16px;
 }
 
 .template-variables h4,
 .template-phases-preview h4 {
-  margin: 0 0 8px 0;
-  font-size: 0.95rem;
-  color: var(--muted-text);
+    margin: 0 0 8px 0;
+    font-size: 0.95rem;
+    color: var(--muted-text);
 }
 
 .template-variables ul,
 .template-phases-preview ol {
-  margin: 0;
-  padding-left: 20px;
+    margin: 0;
+    padding-left: 20px;
 }
 
 .template-variables li,
 .template-phases-preview li {
-  margin-bottom: 4px;
-  font-size: 0.95rem;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
 }
 
 .step-count {
-  color: var(--muted-text);
-  font-weight: normal;
+    color: var(--muted-text);
+    font-weight: normal;
 }
 
 .template-detail-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 16px;
-  border-top: 1px solid var(--btn-border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid var(--btn-border);
 }

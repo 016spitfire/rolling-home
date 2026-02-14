@@ -11,7 +11,7 @@ const DIE_SHAPES = {
   d100: "circle(50%)",
 };
 
-function DieShape({ die, value, rotation, settling }) {
+export function DieShape({ die, value, rotation, settling }) {
   const clipPath = DIE_SHAPES[die];
   const isSquare = die === "d6";
   const currentRotation = settling ? 0 : rotation;
@@ -102,7 +102,7 @@ export function DiceTray({ results, history, rollId }) {
         )}
       </div>
 
-      <div className="dice-stats">
+      <div className="tool-stats">
         <div className="stats-header">Stats</div>
         {totalRolls > 0 ? (
           <div className="stats-grid">

@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { DICE_ORDER, rollDice, createEmptyDiceState } from "../../utils/dice";
 import { playRollSound, vibrate } from "../../utils/sound";
-import { DiceTray } from "../../components/DiceTray/DiceTray";
+import { DiceTray, DieShape } from "../../components/DiceTray/DiceTray";
 import "./DiceRoller.css";
 
 const SHAKE_THRESHOLD = 25;
@@ -119,14 +119,17 @@ export function DiceRoller({ settings, state, onStateChange, onReset }) {
             <div key={die} className="die-row">
               <span className="die-label">{die}</span>
               <button
-                className="die-btn"
+                className="inc-btn dice-inc-btn"
                 onClick={() => updateDie(die, -1)}
                 disabled={dice[die] === 0}
               >
                 −
               </button>
-              <span className="die-count">{dice[die]}</span>
-              <button className="die-btn" onClick={() => updateDie(die, 1)}>
+              <span className="count-value">{dice[die]}</span>
+              <button
+                className="inc-btn dice-inc-btn"
+                onClick={() => updateDie(die, 1)}
+              >
                 +
               </button>
             </div>
@@ -134,7 +137,7 @@ export function DiceRoller({ settings, state, onStateChange, onReset }) {
         </div>
 
         <div className="action-buttons">
-          <button className="roll-btn" onClick={roll} disabled={!hasAnyDice}>
+          <button className="action-btn" onClick={roll} disabled={!hasAnyDice}>
             Roll
           </button>
           <button
@@ -171,11 +174,22 @@ export function DiceRoller({ settings, state, onStateChange, onReset }) {
               {history.map((entry, i) => (
                 <div key={entry.timestamp + "-" + i} className="history-entry">
                   <div className="history-entry-dice">
-                    {entry.results.map((r) => (
-                      <span key={r.die} className="history-die-result">
-                        {r.die}: {r.rolls.join(", ")}
-                      </span>
-                    ))}
+                    {entry.results.map((r) =>
+                      r.rolls.map((roll, rollIndex) => (
+                        <div
+                          key={r.die + "-" + rollIndex}
+                          className="history-die-mini"
+                        >
+                          <span className="history-die-label">{r.die}</span>
+                          <DieShape
+                            die={r.die}
+                            value={roll}
+                            rotation={0}
+                            settling={false}
+                          />
+                        </div>
+                      )),
+                    )}
                   </div>
                   <span className="history-entry-total">{entry.total}</span>
                 </div>

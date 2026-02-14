@@ -72,47 +72,4 @@
     font-size: 0.75rem;
 }
 
-.dice-stats {
-    background: var(--results-bg);
-    border-radius: 6px;
-    padding: 12px;
-}
-
-.stats-header {
-    font-weight: 600;
-    font-size: 1rem;
-    margin-bottom: 8px;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-}
-
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    padding: 6px 8px;
-    background: var(--btn-bg);
-    border-radius: 4px;
-}
-
-.stat-label {
-    font-size: 0.75rem;
-    color: var(--muted-text);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.stat-value {
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-.stats-empty {
-    color: var(--muted-text);
-    font-size: 0.9rem;
-    text-align: center;
-    padding: 16px 0;
-}
+/* Stats classes are now in shared.css (.tool-stats) */
