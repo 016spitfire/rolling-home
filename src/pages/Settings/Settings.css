@@ -93,3 +93,10 @@
 .dice-toggle-btn:active {
     opacity: 0.9;
 }
+
+@media (min-width: 768px) {
+    .settings {
+        max-width: 720px;
+        margin: 0 auto;
+    }
+}

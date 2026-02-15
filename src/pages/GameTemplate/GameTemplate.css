@@ -773,6 +773,13 @@
     margin: 8px 0 0;
 }
 
+.runner-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+}
+
 .runner-nav {
     display: flex;
     gap: 12px;
@@ -782,6 +789,171 @@
 
 .runner-nav button {
     flex: 1;
+}
+
+/* Step title */
+.step-title {
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+    color: var(--roll-btn-bg);
+}
+
+/* Session Log */
+.session-log {
+    background: var(--results-bg);
+    border-radius: 6px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.session-log-header {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.session-log-entries {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.log-cycle-header {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--roll-btn-bg);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 0 4px;
+    border-top: 2px solid var(--btn-border);
+    margin-top: 4px;
+}
+
+.log-cycle-header:first-child {
+    border-top: none;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.log-phase-header {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-color);
+    padding: 4px 0 2px;
+}
+
+.log-entry {
+    padding: 6px 8px;
+    background: var(--btn-bg);
+    border-radius: 4px;
+    border: 1px solid var(--btn-border);
+}
+
+.log-entry-text {
+    cursor: pointer;
+}
+
+.log-entry-label {
+    font-size: 0.85rem;
+    color: var(--text-color);
+}
+
+.log-entry-full-text {
+    font-size: 0.8rem;
+    color: var(--muted-text);
+    margin: 6px 0 0;
+    line-height: 1.4;
+}
+
+.log-entry-action {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.log-result-cards,
+.log-result-custom-cards,
+.log-result-tiles,
+.log-result-coins,
+.log-result-dice {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 4px;
+}
+
+.log-card {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 2px 4px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.log-custom-card {
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    background: var(--bg-color);
+    border: 1px solid var(--btn-border);
+    border-radius: 3px;
+}
+
+.log-tile {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 2px 5px;
+    background: white;
+    border: 2px solid #333;
+    border-radius: 3px;
+}
+
+.log-tile.tile-red {
+    color: #d32f2f;
+    border-color: #d32f2f;
+}
+.log-tile.tile-blue {
+    color: #1976d2;
+    border-color: #1976d2;
+}
+.log-tile.tile-yellow {
+    color: #f9a825;
+    border-color: #f9a825;
+}
+.log-tile.tile-black {
+    color: #333;
+    border-color: #333;
+}
+
+.log-coin {
+    font-size: 0.8rem;
+    font-weight: 600;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.log-coin.heads {
+    background: linear-gradient(135deg, #ffd700, #ffec8b);
+    color: #8b6914;
+    border: 1px solid #daa520;
+}
+
+.log-coin.tails {
+    background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+    color: #555;
+    border: 1px solid #999;
+}
+
+.log-die-result {
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    background: var(--bg-color);
+    border-radius: 3px;
 }
 
 /* Game Template List */
@@ -911,4 +1083,54 @@
     margin-top: auto;
     padding-top: 16px;
     border-top: 1px solid var(--btn-border);
+}
+
+@media (min-width: 768px) {
+    .game-template-builder {
+        max-width: 720px;
+        min-height: auto;
+        margin: 0 auto;
+    }
+
+    .builder-content {
+        padding-bottom: 20px;
+    }
+
+    .builder-actions {
+        position: static;
+        padding: 0;
+        border-top: none;
+        max-width: 720px;
+        margin: 16px auto 0;
+    }
+
+    .game-template-runner {
+        max-width: none;
+        min-height: auto;
+    }
+
+    .runner-layout {
+        flex-direction: row;
+        align-items: stretch;
+    }
+
+    .runner-content {
+        flex: 3;
+    }
+
+    .session-log {
+        flex: 2;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .game-template-detail {
+        max-width: 720px;
+        margin: 0 auto;
+    }
+
+    .game-template-list {
+        max-width: 720px;
+        margin: 0 auto;
+    }
 }

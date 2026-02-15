@@ -101,6 +101,10 @@ function App() {
   const [currentPage, setCurrentPage] = useState<string>(getPageFromHash);
   const [menuOpen, setMenuOpen] = useState(false);
   const [saveModalOpen, setSaveModalOpen] = useState(false);
+  const [runnerVariables, setRunnerVariables] = useState<Record<
+    string,
+    number
+  > | null>(null);
   const [settings, setSettings] = useLocalStorage(
     "app-settings",
     defaultSettings,
@@ -221,14 +225,18 @@ function App() {
             template={template}
             settings={settings}
             toolStates={toolStates}
-            onExit={() => handleNavigate(templateId)}
+            initialVariables={runnerVariables}
+            onExit={() => {
+              setRunnerVariables(null);
+              handleNavigate(templateId);
+            }}
           />
         );
       }
     }
 
     if (currentPage.startsWith("edit-template-")) {
-      const templateId = currentPage.replace("edit-template-", "");
+      const templateId = currentPage.replace("edit-", "");
       const template = toolStates.gameTemplates.find(
         (t: any) => t.id === templateId,
       );
@@ -260,7 +268,10 @@ function App() {
         return (
           <GameTemplateDetail
             template={template}
-            onRun={() => handleNavigate("run-" + currentPage)}
+            onRun={(variables: Record<string, number>) => {
+              setRunnerVariables(variables);
+              handleNavigate("run-" + currentPage);
+            }}
             onEdit={() => handleNavigate("edit-" + currentPage)}
           />
         );
@@ -268,7 +279,7 @@ function App() {
     }
 
     if (currentPage.startsWith("edit-deck-")) {
-      const deckId = currentPage.replace("edit-deck-", "");
+      const deckId = currentPage.replace("edit-", "");
       const deck = toolStates.customDecks.find((d: any) => d.id === deckId);
       if (deck) {
         return (

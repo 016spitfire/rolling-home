@@ -170,115 +170,157 @@ export function CustomDeckPlay({ deck, settings, onUpdate, onEdit }) {
     setEditText("");
   };
 
+  // Build card type breakdown
+  const drawnCounts = {};
+  if (reshuffleMode) {
+    // Cumulative frequency from history
+    history.flat().forEach((c) => {
+      drawnCounts[c.text] = (drawnCounts[c.text] || 0) + 1;
+    });
+  } else {
+    // Cards out of the draw pile (hand + discard)
+    [...hand, ...discard].forEach((c) => {
+      drawnCounts[c.text] = (drawnCounts[c.text] || 0) + 1;
+    });
+  }
+
   return (
     <div className="custom-deck-play">
-      <div className="tool-status">
-        <span>Deck: {drawPile.length}</span>
-        {!reshuffleMode && <span>Discard: {discard.length}</span>}
-      </div>
+      <div className="custom-display-panel">
+        <div className="tool-status">
+          <span>Deck: {drawPile.length}</span>
+          {!reshuffleMode && <span>Discard: {discard.length}</span>}
+        </div>
 
-      <div className="drawn-card-area">
-        {hand.length > 0 ? (
-          <div className="custom-hand">
-            {hand.map((card) => (
-              <div
-                key={card.id}
-                className="custom-card"
-                onClick={() => startEditCard(card)}
-              >
-                <span className="custom-card-text">{card.text}</span>
+        <div className="drawn-card-area">
+          {hand.length > 0 ? (
+            <div className="custom-hand">
+              {hand.map((card) => (
+                <div
+                  key={card.id}
+                  className="custom-card"
+                  onClick={() => startEditCard(card)}
+                >
+                  <span className="custom-card-text">{card.text}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="custom-card card-placeholder">
+              <span>Draw cards</span>
+            </div>
+          )}
+        </div>
+
+        <div className="tool-stats">
+          <div className="stats-header">
+            {reshuffleMode ? "Draw Frequency" : "Cards Drawn"}
+          </div>
+          <div className="card-type-breakdown">
+            {cardTypes.map((ct) => (
+              <div key={ct.id} className="breakdown-row">
+                <span className="breakdown-label">{ct.text}</span>
+                <span className="breakdown-value">
+                  {reshuffleMode
+                    ? `\u00d7${drawnCounts[ct.text] || 0}`
+                    : `${drawnCounts[ct.text] || 0} / ${ct.count}`}
+                </span>
               </div>
             ))}
           </div>
-        ) : (
-          <div className="custom-card card-placeholder">
-            <span>Draw cards</span>
-          </div>
-        )}
+        </div>
       </div>
 
-      <div className="count-selector">
-        <span className="count-label">Draw</span>
-        <button
-          className="inc-btn"
-          onClick={() => updateDrawCount(-1)}
-          disabled={drawCount <= 1}
-        >
-          −
-        </button>
-        <span className="count-value">{drawCount}</span>
-        <button
-          className="inc-btn"
-          onClick={() => updateDrawCount(1)}
-          disabled={drawCount >= 10}
-        >
-          +
-        </button>
-        <span className="count-label">cards</span>
-      </div>
-
-      <div className="card-actions">
-        <button
-          className="action-btn"
-          onClick={drawCards}
-          disabled={drawPile.length === 0}
-        >
-          Draw {drawCount > 1 ? drawCount + " Cards" : "Card"}
-        </button>
-        {hand.length > 0 && (
-          <button className="clear-btn" onClick={clearHand}>
-            Clear
-          </button>
-        )}
-      </div>
-
-      <div className="tool-options">
-        <div className="setting-row">
-          <span className="setting-label">Reshuffle after draw</span>
+      <div className="custom-controls">
+        <div className="count-selector">
+          <span className="count-label">Draw</span>
           <button
-            className={"toggle-btn " + (reshuffleMode ? "toggle-on" : "")}
-            onClick={() => onUpdate({ reshuffleMode: !reshuffleMode })}
+            className="inc-btn"
+            onClick={() => updateDrawCount(-1)}
+            disabled={drawCount <= 1}
           >
-            {reshuffleMode ? "On" : "Off"}
+            −
+          </button>
+          <span className="count-value">{drawCount}</span>
+          <button
+            className="inc-btn"
+            onClick={() => updateDrawCount(1)}
+            disabled={drawCount >= 10}
+          >
+            +
+          </button>
+          <span className="count-label">cards</span>
+        </div>
+
+        <div className="card-actions">
+          <button
+            className="action-btn"
+            onClick={drawCards}
+            disabled={drawPile.length === 0}
+          >
+            Draw {drawCount > 1 ? drawCount + " Cards" : "Card"}
+          </button>
+          {hand.length > 0 && (
+            <button className="clear-btn" onClick={clearHand}>
+              Clear
+            </button>
+          )}
+        </div>
+
+        <div className="tool-options">
+          <div className="setting-row">
+            <span className="setting-label">Reshuffle after draw</span>
+            <button
+              className={"toggle-btn " + (reshuffleMode ? "toggle-on" : "")}
+              onClick={() => onUpdate({ reshuffleMode: !reshuffleMode })}
+            >
+              {reshuffleMode ? "On" : "Off"}
+            </button>
+          </div>
+        </div>
+
+        <div className="card-actions secondary-actions">
+          {!reshuffleMode && discard.length > 0 && (
+            <button className="clear-btn" onClick={reshuffleDeck}>
+              Reshuffle Discard
+            </button>
+          )}
+          <button className="clear-btn" onClick={resetDeck}>
+            New Deck
+          </button>
+          <button className="clear-btn" onClick={onEdit}>
+            Edit Deck
           </button>
         </div>
       </div>
 
-      <div className="card-actions secondary-actions">
-        {!reshuffleMode && discard.length > 0 && (
-          <button className="clear-btn" onClick={reshuffleDeck}>
-            Reshuffle Discard
-          </button>
+      <div className="custom-history">
+        <div className="history-header">
+          <span>History{history.length > 0 ? ` (${history.length})` : ""}</span>
+        </div>
+        {history.length > 0 ? (
+          <>
+            <div className="history-draws">
+              {history.map((draw, drawIndex) => (
+                <div key={drawIndex} className="history-draw-group">
+                  {draw.map((card, cardIndex) => (
+                    <div key={cardIndex} className="history-custom-card">
+                      {card.text}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <button className="clear-btn" onClick={clearHistory}>
+              Clear History
+            </button>
+          </>
+        ) : (
+          <div className="history-empty">
+            Draw some cards to see your history here.
+          </div>
         )}
-        <button className="clear-btn" onClick={resetDeck}>
-          New Deck
-        </button>
-        <button className="clear-btn" onClick={onEdit}>
-          Edit Deck
-        </button>
       </div>
-
-      {history.length > 0 && (
-        <div className="custom-history">
-          <div className="history-header">
-            <span>History ({history.length} draws)</span>
-          </div>
-          <div className="history-draws">
-            {history.map((draw, drawIndex) => (
-              <div key={drawIndex} className="history-draw-group">
-                {draw.map((card, cardIndex) => (
-                  <div key={cardIndex} className="history-custom-card">
-                    {card.text}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-          <button className="clear-btn" onClick={clearHistory}>
-            Clear History
-          </button>
-        </div>
-      )}
 
       {/* Edit Card Modal */}
       {editingCard && (

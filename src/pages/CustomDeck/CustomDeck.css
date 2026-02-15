@@ -104,6 +104,26 @@
     gap: 16px;
 }
 
+.custom-display-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    order: 1;
+}
+
+.custom-display-panel .drawn-card-area {
+    background: var(--results-bg);
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.custom-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    order: 2;
+}
+
 .custom-hand {
     display: flex;
     flex-wrap: wrap;
@@ -150,6 +170,13 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    order: 3;
+}
+
+.custom-history .history-header {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0;
 }
 
 .history-custom-card {
@@ -231,6 +258,37 @@
     flex: 1;
 }
 
+/* Card type breakdown */
+.card-type-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--btn-border);
+}
+
+.breakdown-row:last-child {
+    border-bottom: none;
+}
+
+.breakdown-label {
+    font-size: 0.85rem;
+    word-break: break-word;
+    margin-right: 8px;
+}
+
+.breakdown-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
 /* Custom deck drawn area (reused from card-picker but local to custom deck) */
 .custom-deck-play .drawn-card-area {
     display: flex;
@@ -240,11 +298,6 @@
 }
 
 /* Custom deck history */
-.custom-history .history-header {
-    font-size: 0.9rem;
-    color: var(--muted-text);
-}
-
 .custom-history .history-draws {
     display: flex;
     flex-direction: column;
@@ -259,4 +312,33 @@
 .custom-history .history-draw-group:last-child {
     border-bottom: none;
     padding-bottom: 0;
+}
+
+.custom-history .clear-btn {
+    margin-top: 4px;
+}
+
+@media (min-width: 768px) {
+    .custom-deck-play {
+        flex-direction: row;
+        max-width: none;
+        align-items: stretch;
+    }
+
+    .custom-display-panel {
+        flex: 1;
+        order: 1;
+    }
+
+    .custom-controls {
+        flex: 1;
+        order: 2;
+    }
+
+    .custom-history {
+        flex: 1;
+        max-height: 80vh;
+        overflow-y: auto;
+        order: 3;
+    }
 }

@@ -98,7 +98,7 @@ export function GameTemplateBuilder({
     const newStep = {
       id: generateId("step"),
       type,
-      ...(type === "text" ? { text: "" } : {}),
+      ...(type === "text" ? { title: "", text: "" } : {}),
       ...(type === "auto-action" || type === "input-action"
         ? {
             actionType: "cards",
@@ -340,7 +340,7 @@ export function GameTemplateBuilder({
                             >
                               {step.type === "text" && (
                                 <span className="step-text">
-                                  ✎ {step.text || "(empty text)"}
+                                  ✎ {step.title || step.text || "(empty text)"}
                                 </span>
                               )}
                               {step.type === "auto-action" && (
@@ -458,15 +458,26 @@ function StepEditorModal({
         <h3>Edit Step</h3>
 
         {localStep.type === "text" && (
-          <div className="editor-field">
-            <label>Instruction Text</label>
-            <textarea
-              value={localStep.text || ""}
-              onChange={(e) => updateLocal({ text: e.target.value })}
-              placeholder="Enter instruction for players..."
-              rows={3}
-            />
-          </div>
+          <>
+            <div className="editor-field">
+              <label>Title (shown in session log)</label>
+              <input
+                type="text"
+                value={localStep.title || ""}
+                onChange={(e) => updateLocal({ title: e.target.value })}
+                placeholder="e.g., Deal starting hands"
+              />
+            </div>
+            <div className="editor-field">
+              <label>Full Text</label>
+              <textarea
+                value={localStep.text || ""}
+                onChange={(e) => updateLocal({ text: e.target.value })}
+                placeholder="Enter instruction for players..."
+                rows={3}
+              />
+            </div>
+          </>
         )}
 
         {(localStep.type === "auto-action" ||
