@@ -19,6 +19,7 @@ function generateId(prefix) {
 export function GameTemplateBuilder({
   existingTemplate = null,
   customDecks = [],
+  deckPresets = [],
   onSave,
   onDelete = null,
   onCancel,
@@ -420,6 +421,7 @@ export function GameTemplateBuilder({
           phaseId={editingStep.phaseId}
           setupVariables={setupVariables}
           customDecks={customDecks}
+          deckPresets={deckPresets}
           onSave={(updates) => {
             updateStep(editingStep.phaseId, editingStep.step.id, updates);
             setEditingStep(null);
@@ -436,6 +438,7 @@ function StepEditorModal({
   phaseId,
   setupVariables,
   customDecks,
+  deckPresets,
   onSave,
   onCancel,
 }) {
@@ -527,11 +530,24 @@ function StepEditorModal({
                     }
                   >
                     <option value="standard">Standard Deck</option>
-                    {customDecks.map((deck) => (
-                      <option key={deck.id} value={deck.id}>
-                        {deck.name}
-                      </option>
-                    ))}
+                    {deckPresets.length > 0 && (
+                      <optgroup label="Deck Presets">
+                        {deckPresets.map((preset) => (
+                          <option key={preset.id} value={preset.id}>
+                            {preset.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    )}
+                    {customDecks.length > 0 && (
+                      <optgroup label="Custom Decks">
+                        {customDecks.map((deck) => (
+                          <option key={deck.id} value={deck.id}>
+                            {deck.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    )}
                   </select>
                 </div>
                 {localStep.type === "auto-action" && (

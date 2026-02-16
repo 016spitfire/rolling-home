@@ -245,6 +245,7 @@ function App() {
           <GameTemplateBuilder
             existingTemplate={template}
             customDecks={toolStates.customDecks}
+            deckPresets={toolStates.deckPresets}
             onSave={(updates: any) => {
               toolStates.updateGameTemplate(templateId, updates);
               handleNavigate(templateId);
@@ -336,6 +337,12 @@ function App() {
             onReset={toolStates.resetCards}
             shuffleArray={toolStates.shuffleArray}
             createFullDeck={toolStates.createFullDeck}
+            SUITS={toolStates.SUITS}
+            RANKS={toolStates.RANKS}
+            FACE_RANKS={toolStates.FACE_RANKS}
+            deckPresets={toolStates.deckPresets}
+            onAddPreset={toolStates.addDeckPreset}
+            onDeletePreset={toolStates.deleteDeckPreset}
           />
         );
       case "coin":
@@ -372,6 +379,7 @@ function App() {
         return (
           <GameTemplateBuilder
             customDecks={toolStates.customDecks}
+            deckPresets={toolStates.deckPresets}
             onSave={(template: any) => {
               const newId = toolStates.addGameTemplate(template);
               handleNavigate(newId);

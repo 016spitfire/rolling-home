@@ -7,6 +7,7 @@ const SUIT_SYMBOLS = {
   hearts: "\u2665",
   diamonds: "\u2666",
   clubs: "\u2663",
+  joker: "\u2605",
 };
 
 export function GameTemplateRunner({
@@ -67,7 +68,30 @@ export function GameTemplateRunner({
         const count = evaluateExpression(config.drawCount);
         const deckSource = config.deckSource || "standard";
 
-        if (deckSource === "standard") {
+        if (deckSource === "standard" || deckSource.startsWith("preset-")) {
+          // For preset sources, initialize the card state from the preset if needed
+          if (deckSource.startsWith("preset-")) {
+            const preset = toolStates.deckPresets.find(
+              (p) => p.id === deckSource,
+            );
+            if (preset && toolStates.cardState.activePresetId !== deckSource) {
+              toolStates.resetCards(1, preset);
+              // After reset, we need to draw from the fresh deck
+              const freshDeck = toolStates.shuffleArray(
+                toolStates.createFullDeck(1, preset),
+              );
+              const numToDraw = Math.min(count, freshDeck.length);
+              const drawnCards = freshDeck.slice(0, numToDraw);
+              const remaining = freshDeck.slice(numToDraw);
+              toolStates.updateCardState({
+                hand: drawnCards,
+                deck: remaining,
+              });
+              setStepResult({ type: "cards", cards: drawnCards });
+              break;
+            }
+          }
+
           const { deck, discard, hand } = toolStates.cardState;
           let currentDeck = deck;
           let currentDiscard = discard;
@@ -212,7 +236,28 @@ export function GameTemplateRunner({
       case "cards": {
         const deckSource = config.deckSource || "standard";
 
-        if (deckSource === "standard") {
+        if (deckSource === "standard" || deckSource.startsWith("preset-")) {
+          if (deckSource.startsWith("preset-")) {
+            const preset = toolStates.deckPresets.find(
+              (p) => p.id === deckSource,
+            );
+            if (preset && toolStates.cardState.activePresetId !== deckSource) {
+              toolStates.resetCards(1, preset);
+              const freshDeck = toolStates.shuffleArray(
+                toolStates.createFullDeck(1, preset),
+              );
+              const numToDraw = Math.min(count, freshDeck.length);
+              const drawnCards = freshDeck.slice(0, numToDraw);
+              const remaining = freshDeck.slice(numToDraw);
+              toolStates.updateCardState({
+                hand: drawnCards,
+                deck: remaining,
+              });
+              setStepResult({ type: "cards", cards: drawnCards });
+              break;
+            }
+          }
+
           const { deck, discard, hand } = toolStates.cardState;
           let currentDeck = deck;
           let currentDiscard = discard;
@@ -412,12 +457,13 @@ export function GameTemplateRunner({
         return (
           <div className="log-result-cards">
             {result.cards.map((card) => {
+              const isJoker = card.suit === "joker";
               const isRed = card.suit === "hearts" || card.suit === "diamonds";
+              const cls = isJoker
+                ? "log-card card-joker"
+                : "log-card " + (isRed ? "card-red" : "card-black");
               return (
-                <span
-                  key={card.id}
-                  className={"log-card " + (isRed ? "card-red" : "card-black")}
-                >
+                <span key={card.id} className={cls}>
                   {card.rank}
                   {SUIT_SYMBOLS[card.suit]}
                 </span>
@@ -557,15 +603,14 @@ export function GameTemplateRunner({
                   {stepResult.type === "cards" && (
                     <div className="result-cards">
                       {stepResult.cards.map((card) => {
+                        const isJoker = card.suit === "joker";
                         const isRed =
                           card.suit === "hearts" || card.suit === "diamonds";
+                        const cls = isJoker
+                          ? "mini-card card-joker"
+                          : "mini-card " + (isRed ? "card-red" : "card-black");
                         return (
-                          <div
-                            key={card.id}
-                            className={
-                              "mini-card " + (isRed ? "card-red" : "card-black")
-                            }
-                          >
+                          <div key={card.id} className={cls}>
                             <span>{card.rank}</span>
                             <span>{SUIT_SYMBOLS[card.suit]}</span>
                           </div>

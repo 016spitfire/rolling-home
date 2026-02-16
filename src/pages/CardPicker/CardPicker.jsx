@@ -1,9 +1,27 @@
-import { useCallback } from "react";
+import { useState, useCallback } from "react";
 import { playRollSound, vibrate } from "../../utils/sound";
 import "./CardPicker.css";
 
-const SUIT_SYMBOLS = { spades: "♠", hearts: "♥", diamonds: "♦", clubs: "♣" };
+const SUIT_SYMBOLS = {
+  spades: "♠",
+  hearts: "♥",
+  diamonds: "♦",
+  clubs: "♣",
+  joker: "★",
+};
 const MAX_CARD_HISTORY = 20;
+
+function createDefaultIncludedCards(SUITS, RANKS) {
+  const included = {};
+  for (const suit of SUITS) {
+    for (const rank of RANKS) {
+      included[rank + "-" + suit] = true;
+    }
+  }
+  included["Joker-joker-1"] = false;
+  included["Joker-joker-2"] = false;
+  return included;
+}
 
 export function CardPicker({
   settings,
@@ -12,6 +30,12 @@ export function CardPicker({
   onReset,
   shuffleArray,
   createFullDeck,
+  SUITS,
+  RANKS,
+  FACE_RANKS,
+  deckPresets,
+  onAddPreset,
+  onDeletePreset,
 }) {
   const {
     deckCount,
@@ -20,9 +44,137 @@ export function CardPicker({
     hand,
     drawCount,
     reshuffleMode,
+    activePresetId,
     history = [],
   } = state;
 
+  // Deck config local state
+  const [configOpen, setConfigOpen] = useState(false);
+  const [workingConfig, setWorkingConfig] = useState(() =>
+    createDefaultIncludedCards(SUITS, RANKS),
+  );
+  const [presetName, setPresetName] = useState("");
+  const [loadedPresetId, setLoadedPresetId] = useState(null);
+
+  // --- Quick toggle helpers ---
+  const isSuitEnabled = (suit) => {
+    return RANKS.every((rank) => workingConfig[rank + "-" + suit]);
+  };
+
+  const isSuitPartial = (suit) => {
+    const enabled = RANKS.filter(
+      (rank) => workingConfig[rank + "-" + suit],
+    ).length;
+    return enabled > 0 && enabled < RANKS.length;
+  };
+
+  const toggleSuit = (suit) => {
+    const allOn = isSuitEnabled(suit);
+    const updates = {};
+    for (const rank of RANKS) {
+      updates[rank + "-" + suit] = !allOn;
+    }
+    setWorkingConfig((prev) => ({ ...prev, ...updates }));
+  };
+
+  const areFaceCardsEnabled = () => {
+    return SUITS.every((suit) =>
+      FACE_RANKS.every((rank) => workingConfig[rank + "-" + suit]),
+    );
+  };
+
+  const areFaceCardsPartial = () => {
+    const total = SUITS.length * FACE_RANKS.length;
+    const enabled = SUITS.reduce(
+      (acc, suit) =>
+        acc +
+        FACE_RANKS.filter((rank) => workingConfig[rank + "-" + suit]).length,
+      0,
+    );
+    return enabled > 0 && enabled < total;
+  };
+
+  const toggleFaceCards = () => {
+    const allOn = areFaceCardsEnabled();
+    const updates = {};
+    for (const suit of SUITS) {
+      for (const rank of FACE_RANKS) {
+        updates[rank + "-" + suit] = !allOn;
+      }
+    }
+    setWorkingConfig((prev) => ({ ...prev, ...updates }));
+  };
+
+  const areJokersEnabled = () => {
+    return workingConfig["Joker-joker-1"] && workingConfig["Joker-joker-2"];
+  };
+
+  const areJokersPartial = () => {
+    const j1 = workingConfig["Joker-joker-1"];
+    const j2 = workingConfig["Joker-joker-2"];
+    return (j1 || j2) && !(j1 && j2);
+  };
+
+  const toggleJokers = () => {
+    const allOn = areJokersEnabled();
+    setWorkingConfig((prev) => ({
+      ...prev,
+      "Joker-joker-1": !allOn,
+      "Joker-joker-2": !allOn,
+    }));
+  };
+
+  const toggleCard = (key) => {
+    setWorkingConfig((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const countEnabled = () => {
+    return Object.values(workingConfig).filter(Boolean).length;
+  };
+
+  // --- Preset management ---
+  const loadPreset = (presetId) => {
+    if (presetId === "standard") {
+      setWorkingConfig(createDefaultIncludedCards(SUITS, RANKS));
+      setLoadedPresetId(null);
+      return;
+    }
+    const preset = deckPresets.find((p) => p.id === presetId);
+    if (preset) {
+      setWorkingConfig({ ...preset.includedCards });
+      setLoadedPresetId(preset.id);
+    }
+  };
+
+  const savePreset = () => {
+    if (!presetName.trim()) return;
+    onAddPreset({
+      name: presetName.trim(),
+      includedCards: { ...workingConfig },
+    });
+    setPresetName("");
+  };
+
+  // --- Apply config ---
+  const applyConfig = () => {
+    const presetConfig = { includedCards: workingConfig };
+    onStateChange({
+      activePresetId: loadedPresetId,
+      deck: shuffleArray(createFullDeck(deckCount, presetConfig)),
+      discard: [],
+      hand: [],
+      history: [],
+    });
+  };
+
+  // --- Active preset helper ---
+  const getActivePreset = () => {
+    if (!activePresetId) return null;
+    const preset = deckPresets.find((p) => p.id === activePresetId);
+    return preset || null;
+  };
+
+  // --- Card actions ---
   const drawCards = useCallback(() => {
     if (deck.length === 0) return;
 
@@ -91,8 +243,9 @@ export function CardPicker({
   };
 
   const resetDeck = () => {
+    const preset = getActivePreset();
     onStateChange({
-      deck: shuffleArray(createFullDeck(deckCount)),
+      deck: shuffleArray(createFullDeck(deckCount, preset)),
       discard: [],
       hand: [],
       history: [],
@@ -111,15 +264,17 @@ export function CardPicker({
 
   const updateDeckCount = (delta) => {
     const newCount = Math.max(1, Math.min(8, deckCount + delta));
+    const preset = getActivePreset();
     onStateChange({
       deckCount: newCount,
-      deck: shuffleArray(createFullDeck(newCount)),
+      deck: shuffleArray(createFullDeck(newCount, preset)),
       discard: [],
       hand: [],
       history: [],
     });
   };
 
+  // --- Stats ---
   const allDrawnCards = history.flat();
   const totalCards = allDrawnCards.length;
   const topSuit =
@@ -141,6 +296,18 @@ export function CardPicker({
         ).sort((a, b) => b[1] - a[1])[0]
       : null;
 
+  // --- Card rendering helper ---
+  const getCardClasses = (card, extraClass = "") => {
+    const isJoker = card.suit === "joker";
+    const isRed = card.suit === "hearts" || card.suit === "diamonds";
+    let cls = "playing-card";
+    if (extraClass) cls += " " + extraClass;
+    if (isJoker) cls += " card-joker";
+    else if (isRed) cls += " card-red";
+    else cls += " card-black";
+    return cls;
+  };
+
   return (
     <div className="card-picker">
       <div className="card-display-panel">
@@ -152,21 +319,12 @@ export function CardPicker({
         <div className="drawn-card-area">
           {hand.length > 0 ? (
             <div className="hand">
-              {hand.map((card) => {
-                const isRed =
-                  card.suit === "hearts" || card.suit === "diamonds";
-                return (
-                  <div
-                    key={card.id}
-                    className={
-                      "playing-card " + (isRed ? "card-red" : "card-black")
-                    }
-                  >
-                    <span className="card-rank">{card.rank}</span>
-                    <span className="card-suit">{SUIT_SYMBOLS[card.suit]}</span>
-                  </div>
-                );
-              })}
+              {hand.map((card) => (
+                <div key={card.id} className={getCardClasses(card)}>
+                  <span className="card-rank">{card.rank}</span>
+                  <span className="card-suit">{SUIT_SYMBOLS[card.suit]}</span>
+                </div>
+              ))}
             </div>
           ) : (
             <div className="playing-card card-placeholder">
@@ -274,6 +432,208 @@ export function CardPicker({
           </div>
         </div>
 
+        {/* Deck Config Panel */}
+        <div className="deck-config">
+          <button
+            className="deck-config-toggle"
+            onClick={() => setConfigOpen(!configOpen)}
+          >
+            <span>Deck Config</span>
+            <span className="config-toggle-icon">{configOpen ? "▲" : "▼"}</span>
+          </button>
+
+          {configOpen && (
+            <div className="deck-config-body">
+              {/* Preset selector */}
+              <div className="config-section">
+                <label className="config-label">Preset</label>
+                <select
+                  className="config-select"
+                  value=""
+                  onChange={(e) => {
+                    if (e.target.value) loadPreset(e.target.value);
+                  }}
+                >
+                  <option value="">Load a preset...</option>
+                  <option value="standard">Standard 52-Card</option>
+                  {deckPresets.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Quick toggles */}
+              <div className="config-section">
+                <label className="config-label">Quick Toggles</label>
+                <div className="quick-toggles">
+                  {SUITS.map((suit) => {
+                    const on = isSuitEnabled(suit);
+                    const partial = isSuitPartial(suit);
+                    return (
+                      <button
+                        key={suit}
+                        className={
+                          "quick-toggle-btn" +
+                          (on ? " toggle-active" : "") +
+                          (partial ? " toggle-partial" : "") +
+                          (suit === "hearts" || suit === "diamonds"
+                            ? " toggle-red"
+                            : "")
+                        }
+                        onClick={() => toggleSuit(suit)}
+                        title={suit}
+                      >
+                        {SUIT_SYMBOLS[suit]}
+                      </button>
+                    );
+                  })}
+                  <button
+                    className={
+                      "quick-toggle-btn" +
+                      (areFaceCardsEnabled() ? " toggle-active" : "") +
+                      (areFaceCardsPartial() ? " toggle-partial" : "")
+                    }
+                    onClick={toggleFaceCards}
+                    title="Face cards (J, Q, K)"
+                  >
+                    JQK
+                  </button>
+                  <button
+                    className={
+                      "quick-toggle-btn" +
+                      (areJokersEnabled() ? " toggle-active" : "") +
+                      (areJokersPartial() ? " toggle-partial" : "")
+                    }
+                    onClick={toggleJokers}
+                    title="Jokers"
+                  >
+                    ★
+                  </button>
+                </div>
+              </div>
+
+              {/* Card grid */}
+              <div className="config-section">
+                <label className="config-label">Cards ({countEnabled()})</label>
+                <div className="card-grid">
+                  {SUITS.map((suit) => (
+                    <div key={suit} className="card-grid-row">
+                      <span
+                        className={
+                          "grid-suit-label" +
+                          (suit === "hearts" || suit === "diamonds"
+                            ? " grid-suit-red"
+                            : "")
+                        }
+                      >
+                        {SUIT_SYMBOLS[suit]}
+                      </span>
+                      {RANKS.map((rank) => {
+                        const key = rank + "-" + suit;
+                        const on = workingConfig[key];
+                        return (
+                          <button
+                            key={key}
+                            className={
+                              "grid-card-btn" + (on ? " grid-card-on" : "")
+                            }
+                            onClick={() => toggleCard(key)}
+                            title={rank + " of " + suit}
+                          >
+                            {rank}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ))}
+                  {/* Joker row */}
+                  <div className="card-grid-row joker-row">
+                    <span className="grid-suit-label grid-suit-joker">★</span>
+                    <button
+                      className={
+                        "grid-card-btn grid-joker-btn" +
+                        (workingConfig["Joker-joker-1"] ? " grid-card-on" : "")
+                      }
+                      onClick={() => toggleCard("Joker-joker-1")}
+                      title="Joker 1"
+                    >
+                      J1
+                    </button>
+                    <button
+                      className={
+                        "grid-card-btn grid-joker-btn" +
+                        (workingConfig["Joker-joker-2"] ? " grid-card-on" : "")
+                      }
+                      onClick={() => toggleCard("Joker-joker-2")}
+                      title="Joker 2"
+                    >
+                      J2
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Save preset */}
+              <div className="config-section config-save">
+                <input
+                  type="text"
+                  className="config-input"
+                  placeholder="Preset name..."
+                  value={presetName}
+                  onChange={(e) => setPresetName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") savePreset();
+                  }}
+                />
+                <button
+                  className="clear-btn"
+                  onClick={savePreset}
+                  disabled={!presetName.trim()}
+                >
+                  Save Preset
+                </button>
+              </div>
+
+              {/* Delete presets */}
+              {deckPresets.length > 0 && (
+                <div className="config-section">
+                  <label className="config-label">Saved Presets</label>
+                  <div className="preset-list">
+                    {deckPresets.map((p) => (
+                      <div key={p.id} className="preset-list-item">
+                        <span
+                          className="preset-name"
+                          onClick={() => loadPreset(p.id)}
+                        >
+                          {p.name}
+                        </span>
+                        <button
+                          className="remove-btn"
+                          onClick={() => onDeletePreset(p.id)}
+                          title="Delete preset"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Apply button */}
+              <button
+                className="action-btn config-apply-btn"
+                onClick={applyConfig}
+                disabled={countEnabled() === 0}
+              >
+                Apply & New Deck
+              </button>
+            </div>
+          )}
+        </div>
+
         <div className="card-actions secondary-actions">
           {!reshuffleMode && discard.length > 0 && (
             <button className="clear-btn" onClick={reshuffleDeck}>
@@ -295,24 +655,17 @@ export function CardPicker({
             <div className="history-draws">
               {history.map((draw, drawIndex) => (
                 <div key={drawIndex} className="history-draw-group">
-                  {draw.map((card) => {
-                    const isRed =
-                      card.suit === "hearts" || card.suit === "diamonds";
-                    return (
-                      <div
-                        key={card.id}
-                        className={
-                          "playing-card history-card " +
-                          (isRed ? "card-red" : "card-black")
-                        }
-                      >
-                        <span className="card-rank">{card.rank}</span>
-                        <span className="card-suit">
-                          {SUIT_SYMBOLS[card.suit]}
-                        </span>
-                      </div>
-                    );
-                  })}
+                  {draw.map((card) => (
+                    <div
+                      key={card.id}
+                      className={getCardClasses(card, "history-card")}
+                    >
+                      <span className="card-rank">{card.rank}</span>
+                      <span className="card-suit">
+                        {SUIT_SYMBOLS[card.suit]}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>

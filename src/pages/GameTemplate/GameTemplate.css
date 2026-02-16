@@ -641,6 +641,20 @@
     color: #333;
 }
 
+.mini-card.card-joker {
+    background: linear-gradient(
+        135deg,
+        #ff6b6b,
+        #ffd93d,
+        #6bcb77,
+        #4d96ff,
+        #9b59b6
+    );
+    color: white;
+    border-color: #9b59b6;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
 .result-custom-cards {
     display: flex;
     flex-direction: column;
@@ -890,6 +904,20 @@
     background: white;
     border: 1px solid #ccc;
     border-radius: 3px;
+}
+
+.log-card.card-joker {
+    background: linear-gradient(
+        135deg,
+        #ff6b6b,
+        #ffd93d,
+        #6bcb77,
+        #4d96ff,
+        #9b59b6
+    );
+    color: white;
+    border-color: #9b59b6;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .log-custom-card {

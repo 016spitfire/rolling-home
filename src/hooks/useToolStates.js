@@ -25,13 +25,25 @@ const RANKS = [
   "Q",
   "K",
 ];
+const FACE_RANKS = ["J", "Q", "K"];
 
-function createFullDeck(deckCount = 1) {
+function createFullDeck(deckCount = 1, presetConfig = null) {
   const deck = [];
   for (let d = 0; d < deckCount; d++) {
     for (const suit of SUITS) {
       for (const rank of RANKS) {
+        if (presetConfig && !presetConfig.includedCards[rank + "-" + suit]) {
+          continue;
+        }
         deck.push({ suit, rank, id: rank + "-" + suit + "-" + d });
+      }
+    }
+    if (presetConfig) {
+      if (presetConfig.includedCards["Joker-joker-1"]) {
+        deck.push({ suit: "joker", rank: "Joker", id: "Joker-joker-1-" + d });
+      }
+      if (presetConfig.includedCards["Joker-joker-2"]) {
+        deck.push({ suit: "joker", rank: "Joker", id: "Joker-joker-2-" + d });
       }
     }
   }
@@ -79,6 +91,7 @@ const defaultDiceState = {
 
 const defaultCardState = {
   deckCount: 1,
+  activePresetId: null,
   deck: shuffleArray(createFullDeck(1)),
   discard: [],
   hand: [],
@@ -127,6 +140,9 @@ export function useToolStates() {
     [],
   );
 
+  // Deck presets stored in localStorage
+  const [deckPresets, setDeckPresets] = useLocalStorage("deck-presets", []);
+
   // Dice actions
   const updateDiceState = useCallback((updates) => {
     setDiceState((prev) => ({ ...prev, ...updates }));
@@ -141,11 +157,12 @@ export function useToolStates() {
     setCardState((prev) => ({ ...prev, ...updates }));
   }, []);
 
-  const resetCards = useCallback((deckCount = 1) => {
+  const resetCards = useCallback((deckCount = 1, presetConfig = null) => {
     setCardState({
       ...defaultCardState,
       deckCount,
-      deck: shuffleArray(createFullDeck(deckCount)),
+      activePresetId: presetConfig?.id || null,
+      deck: shuffleArray(createFullDeck(deckCount, presetConfig)),
     });
   }, []);
 
@@ -200,6 +217,36 @@ export function useToolStates() {
     [setCustomDecks],
   );
 
+  // Deck preset actions
+  const addDeckPreset = useCallback(
+    (preset) => {
+      const newPreset = {
+        ...preset,
+        id: "preset-" + Date.now(),
+        createdAt: Date.now(),
+      };
+      setDeckPresets((prev) => [...prev, newPreset]);
+      return newPreset.id;
+    },
+    [setDeckPresets],
+  );
+
+  const updateDeckPreset = useCallback(
+    (presetId, updates) => {
+      setDeckPresets((prev) =>
+        prev.map((p) => (p.id === presetId ? { ...p, ...updates } : p)),
+      );
+    },
+    [setDeckPresets],
+  );
+
+  const deleteDeckPreset = useCallback(
+    (presetId) => {
+      setDeckPresets((prev) => prev.filter((p) => p.id !== presetId));
+    },
+    [setDeckPresets],
+  );
+
   // Save/Load game actions
   const saveGame = useCallback(
     (name, existingSaveId = null) => {
@@ -209,6 +256,7 @@ export function useToolStates() {
         coinState,
         tileState,
         customDecks,
+        deckPresets,
       };
 
       if (existingSaveId) {
@@ -229,7 +277,15 @@ export function useToolStates() {
         setSavedGames((prev) => [...prev, newSave]);
       }
     },
-    [diceState, cardState, coinState, tileState, customDecks, setSavedGames],
+    [
+      diceState,
+      cardState,
+      coinState,
+      tileState,
+      customDecks,
+      deckPresets,
+      setSavedGames,
+    ],
   );
 
   const loadGame = useCallback(
@@ -245,8 +301,11 @@ export function useToolStates() {
       if (state.customDecks) {
         setCustomDecks(state.customDecks);
       }
+      if (state.deckPresets) {
+        setDeckPresets(state.deckPresets);
+      }
     },
-    [savedGames, setCustomDecks],
+    [savedGames, setCustomDecks, setDeckPresets],
   );
 
   const deleteGame = useCallback(
@@ -325,9 +384,18 @@ export function useToolStates() {
     updateGameTemplate,
     deleteGameTemplate,
 
+    // Deck presets
+    deckPresets,
+    addDeckPreset,
+    updateDeckPreset,
+    deleteDeckPreset,
+
     // Utilities for components
     shuffleArray,
     createFullDeck,
     createFullTileSet,
+    SUITS,
+    RANKS,
+    FACE_RANKS,
   };
 }
