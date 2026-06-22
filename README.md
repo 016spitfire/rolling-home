@@ -1,23 +1,44 @@
 # Rolling Home
 
-A simple, mobile-first dice roller PWA. Select dice types, set quantities, roll them all at once.
+A configurable, mobile-first tabletop gaming companion PWA. Started as a dice roller, grew into a platform for building and running custom tabletop game tools — dice, cards, coins, and Rummikub-style tiles, all configurable instead of fixed.
 
-Built as a companion tool for [Quest Home](#quest-home), a 2-player cooperative card game, but works as a general-purpose dice roller for any tabletop game.
+Built as a companion tool for [Quest Home](#quest-home), a 2-player cooperative card game, but works as a general-purpose toolkit for any tabletop game.
 
 ## Features
 
-- **Dice types:** d4, d6, d8, d10, d12, d20, d100
-- **Quantity selection:** Roll multiple dice of each type
-- **Clear results:** Individual rolls, subtotals per die type, and grand total
-- **Clear button:** Reset dice pool quickly
-- **Dark mode:** Light, dark, or system theme toggle
-- **Shake to roll:** Enable in settings to roll by shaking your phone
-- **Roll sound:** 8-bit style audio feedback (optional)
-- **Vibration:** Haptic feedback on roll (optional)
-- **Customizable dice:** Show/hide individual dice types in settings
-- **Slide-out menu:** Easy navigation between sections
-- **Mobile-first:** Designed for use at the table on your phone
-- **PWA:** Install it like an app, works offline
+### Dice
+- Dice types: d4, d6, d8, d10, d12, d20, d100
+- Quantity selection per die type, roll them all at once
+- Dice tray with individual rolls, subtotals per type, and grand total
+- Dice tumble animation on roll
+- Show/hide individual dice types in settings
+- Shake to roll (optional)
+
+### Cards & Decks
+- Card picker for drawing from a deck
+- Custom deck builder — define your own card sets
+- Configurable deck presets, including joker support
+- Multi-draw support
+
+### Tiles & Coins
+- Tile picker (Rummikub-style tile draws)
+- Coin flipper
+
+### Game Templates
+- Build reusable game definitions with configurable turns and phases
+- Run a saved template directly from the menu
+
+### Save & Persistence
+- Save/load system with named saves and state persistence
+- Roll history and stats panel
+- Hash-based routing between tools
+
+### General
+- Slide-out menu for navigating between tools
+- Dark/light/system theme toggle
+- Roll sound (8-bit style) and vibration feedback, toggleable in settings
+- Responsive layout: mobile-first single column, desktop three-column dashboard
+- PWA — installable, works offline
 
 ## Tech Stack
 
